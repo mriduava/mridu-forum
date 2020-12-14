@@ -1,10 +1,18 @@
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
+const Forum = require('./models/forum');
 
-const db = "mriduforum";
+const db = "forumdb";
+mongoose.connect('MongoDB://localhost:27017/' + db);
 
-app.get('/', (req, res)=>{
-  res.json({"name": 'MRIDU FORUM'})
+Forum.create({
+  title: "Test forum",
+  text: "Once upon a time there was a forum"
+})
+
+app.get('/', async (req, res) => {
+  await res.json({"name": 'MRIDU FORUM'})
 })
 
 const PORT = process.env.PORT || 3200;
