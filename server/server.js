@@ -1,18 +1,26 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const bodyParser= require('body-parser')
 const Forum = require('./models/forum');
 
-const db = "forumdb";
-mongoose.connect('MongoDB://localhost:27017/' + db);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }))
 
-Forum.create({
-  title: "Test forum",
-  text: "Once upon a time there was a forum"
-})
+const db = "forumdb";
+mongoose.connect('mongodb://localhost:27017/' + db, { 
+  useUnifiedTopology: true,
+  useNewUrlParser: true 
+});
 
 app.get('/', async (req, res) => {
-  await res.json({"name": 'MRIDU FORUM'})
+  await Forum.find()
+    .then(allPosts => res.json(allPosts))
+})
+
+app.post('/', async (req, res) => {
+  await Forum.create(req.body)
+    .then(newPost => res.json(newPost))
 })
 
 const PORT = process.env.PORT || 3200;
