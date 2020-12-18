@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const bodyParser= require('body-parser')
 const Forum = require('./models/forum');
 const User = require('./models/user');
-const encrypt = require('./helpers/encrypt');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -25,17 +24,26 @@ app.post('/', async (req, res) => {
     .then(newPost => res.json(newPost))
 })
 
-app.get('/user', async (req, res) => {
-  await User.find()
-    .then(allPosts => res.json(allPosts))
+app.get('/users', async (req, res) => {
+  await User.find({}, 'username', (err, users)=>{
+      res.json(users);
+  })
 })
 
-app.post('/user', async (req, res) => {
-  await User.create({
-    username: req.body.username,
-    password: encrypt.multiEncrypt(req.body.password)
+// REGISTER USER
+app.post('/users', async (req, res) => {
+  let username = req.body.username
+  let password = req.body.password
+  await User.findOne({username: username}, (err, user) => {
+    if (user) {
+      res.json({'ERROR!': 'USERNAME IS USED!!'})
+    } else {
+      User.create({
+        username: username,
+        password: password
+      }).then(newUser => res.json(newUser))
+    }
   })
-    .then(newPost => res.json(newPost))
 })
 
 const PORT = process.env.PORT || 3200;
