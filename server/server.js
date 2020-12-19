@@ -32,19 +32,17 @@ app.get('/users', async (req, res) => {
 
 // REGISTER USER
 app.post('/users', async (req, res) => {
-  let username = req.body.username
-  let password = req.body.password
-  await User.findOne({username: username}, (err, user) => {
-    if (user) {
-      res.json({'ERROR!': 'USERNAME IS USED!!'})
-    } else {
-      User.create({
-        username: username,
-        password: password
-      }).then(newUser => res.json(newUser))
+  let newUser= new User({
+      username: req.body.username}),
+      passWord = req.body.password;
+  await User.register(newUser, passWord, (err, user) => {
+    if(err){
+      return res.json(err.message);
+    }else{
+        res.json('User registration successful!');
     }
-  })
-})
+  }); 
+});
 
 const PORT = process.env.PORT || 3200;
 app.listen(PORT, console.log(`SERVER IS RUNNING AT PORT ${PORT}`));
