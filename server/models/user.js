@@ -6,7 +6,12 @@ let userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password: String
+    password: String,
+    role: {
+        type: String, 
+        enum: ['admin', 'moderator', 'general'], 
+        required: true
+    }
 });
 
 userSchema.plugin(passportLocalMongoose);

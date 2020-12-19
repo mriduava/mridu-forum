@@ -33,7 +33,8 @@ app.get('/users', async (req, res) => {
 // REGISTER USER
 app.post('/users', async (req, res) => {
   let newUser= new User({
-      username: req.body.username}),
+      username: req.body.username,
+      role: req.body.role}),
       passWord = req.body.password;
   await User.register(newUser, passWord, (err, user) => {
     if(err){
