@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser= require('body-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const Forum = require('./models/forum');
 const User = require('./models/user');
 
@@ -18,12 +20,24 @@ mongoose.connect('mongodb://localhost:27017/' + db, {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 
+// SESSION CONFIG
+app.use(session({
+    secret: 'mriduava',
+    saveUninitialized: false,
+    resave: false,
+    store: new MongoStore({
+        url: 'mongodb://localhost:27017/' + db,
+        touchAfter: 24 * 3600
+    })
+}));
+
 // PASSPORT CONFIG
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
 
 // GET ALL FORUM POSTS
 app.get('/', async (req, res) => {
@@ -59,12 +73,13 @@ app.post('/users/register', async (req, res) => {
   }); 
 });
 
-// SIGN IN USER
-app.post('/users/signin', passport.authenticate('local', {
-      successRedirect: '/',
-      failureRedirect: '/users/signin'
-  })
-);
+// LOGIN USER
+app.post("/users/login", passport.authenticate("local", 
+  { successRedirect: "/", 
+    failureRedirect: "/users/register", 
+    failureMessage: "Invalid username or password" 
+  }
+));
 
 // SERVER
 const PORT = process.env.PORT || 3200;
