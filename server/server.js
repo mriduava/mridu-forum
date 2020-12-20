@@ -39,6 +39,14 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+// CHECK IF THE USER IS LOGGED IN 
+const isUserLoggedIn = (req, res, next) => {
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/');
+}
+
 // GET ALL FORUM POSTS
 app.get('/', async (req, res) => {
   await Forum.find({}, (err, post)=>{
@@ -51,9 +59,17 @@ app.get('/', async (req, res) => {
 })
 
 // POST A NEW FORUM
-app.post('/', async (req, res) => {
-  await Forum.create(req.body)
-    .then(newPost => res.json(newPost))
+app.post('/newpost', isUserLoggedIn, async (req, res) => {
+  await Forum.create(req.body, (err, text)=>{
+    if (err) {
+      res.json(err.message);
+    }else{
+      text.author.id = req.user._id;
+      text.author.username = req.user.username;
+      text.save();
+      res.redirect('/')
+    }
+  })
 })
 
 // GET ALL USERS
