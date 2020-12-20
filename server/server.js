@@ -41,8 +41,13 @@ passport.deserializeUser(User.deserializeUser());
 
 // GET ALL FORUM POSTS
 app.get('/', async (req, res) => {
-  await Forum.find()
-    .then(allPosts => res.json(allPosts))
+  await Forum.find({}, (err, post)=>{
+    if (err) {
+      res.json(err);
+    }else{
+      res.json(post);
+    }
+  })
 })
 
 // POST A NEW FORUM
@@ -53,8 +58,19 @@ app.post('/', async (req, res) => {
 
 // GET ALL USERS
 app.get('/users', async (req, res) => {
-  await User.find({}, 'username', (err, users)=>{
+  await User.find({}, 'username' & 'role', (err, users)=>{
       res.json(users);
+  })
+})
+
+// GET USER ID
+app.get('/users/:_id', async (req, res)=>{
+  await User.findById(req.params._id, (err, user)=>{
+    if (err) {
+      res.json(err);
+    }else{
+      res.json(user);
+    }
   })
 })
 
@@ -68,7 +84,9 @@ app.post('/users/register', async (req, res) => {
     if(err){
       return res.json(err.message);
     }else{
-        res.json('User registration successful!');
+      passport.authenticate('local')(req, res, () => {
+        res.redirect('/');
+      });
     }
   }); 
 });
