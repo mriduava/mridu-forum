@@ -79,19 +79,20 @@ app.get('/users', async (req, res) => {
   })
 })
 
-// GET USER ID
+// GET USER BY ID
 app.get('/users/:_id', async (req, res)=>{
-  await User.findById(req.params._id, (err, user)=>{
-    if (err) {
-      res.json(err);
-    }else{
-      res.json(user);
-    }
-  })
+  try {
+    let user = await User.findById(req.params._id);
+      if(!user) 
+        return res.status(404).send("User not found!");
+      res.send(user);
+  } catch(e) {
+      return res.status(404).send("User not found!");
+  }
 })
 
 // REGISTER USER
-app.post('/users/register', async (req, res) => {
+app.post('/register', async (req, res) => {
   let newUser= new User({
       username: req.body.username,
       role: req.body.role}),
@@ -108,7 +109,7 @@ app.post('/users/register', async (req, res) => {
 });
 
 // LOGIN USER
-app.post("/users/login", passport.authenticate("local", 
+app.post("/login", passport.authenticate("local", 
   { successRedirect: "/", 
     failureRedirect: "/users/register", 
     failureMessage: "Invalid username or password" 
