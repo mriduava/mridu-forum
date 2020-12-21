@@ -116,6 +116,18 @@ app.post("/login", passport.authenticate("local",
   }
 ));
 
+// LOGOUT USER
+app.get('/logout', async (req, res) => {
+  await req.logOut();
+  req.session.destroy();
+  res.redirect('/');
+});
+
+// INVALID URL
+app.get('*', async (req, res) => {
+  await res.status(404).send('Page not found!');
+});
+
 // SERVER
 const PORT = process.env.PORT || 3200;
 app.listen(PORT, console.log(`SERVER IS RUNNING AT PORT ${PORT}`));
