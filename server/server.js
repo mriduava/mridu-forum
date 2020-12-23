@@ -48,7 +48,7 @@ const isUserLoggedIn = (req, res, next) => {
 }
 
 // GET ALL FORUM POSTS
-app.get('/', async (req, res) => {
+app.get('/api/forum', async (req, res) => {
   await Forum.find({}, (err, post)=>{
     if (err) {
       res.json(err);
@@ -58,8 +58,20 @@ app.get('/', async (req, res) => {
   })
 })
 
+// GET FORUM ARTICLE BY ID
+app.get('/api/forum/:_id', async (req, res)=>{
+  try {
+    let forumArticle = await Forum.findById(req.params._id);
+      if(!forumArticle) 
+        return res.status(404).send("Article not found!");
+      res.send(forumArticle);
+  } catch(e) {
+      return res.status(404).send("Article not found!");
+  }
+})
+
 // POST A NEW FORUM
-app.post('/newpost', isUserLoggedIn, async (req, res) => {
+app.post('/api/forum/newpost', isUserLoggedIn, async (req, res) => {
   await Forum.create(req.body, (err, text)=>{
     if (err) {
       res.json(err.message);
@@ -73,14 +85,14 @@ app.post('/newpost', isUserLoggedIn, async (req, res) => {
 })
 
 // GET ALL USERS
-app.get('/users', async (req, res) => {
+app.get('/api/users', async (req, res) => {
   await User.find({}, 'username' & 'role', (err, users)=>{
       res.json(users);
   })
 })
 
 // GET USER BY ID
-app.get('/users/:_id', async (req, res)=>{
+app.get('/api/users/:_id', async (req, res)=>{
   try {
     let user = await User.findById(req.params._id);
       if(!user) 
