@@ -8,6 +8,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const Forum = require('./models/forum');
 const User = require('./models/user');
+const Comment = require('./models/comment');
 
 // CONNECT MONGODB
 const db = "forumdb";
@@ -61,7 +62,8 @@ app.get('/api/forum', async (req, res) => {
 // GET FORUM ARTICLE BY ID
 app.get('/api/forum/:_id', async (req, res)=>{
   try {
-    let forumArticle = await Forum.findById(req.params._id);
+    let forumArticle = await Forum.findById(req.params._id)
+      .populate('comments');
       if(!forumArticle) 
         return res.status(404).send("Article not found!");
       res.send(forumArticle);
@@ -79,7 +81,24 @@ app.post('/api/forum/newpost', isUserLoggedIn, async (req, res) => {
       text.author.id = req.user._id;
       text.author.username = req.user.username;
       text.save();
-      res.redirect('/')
+      res.redirect('/api/forum')
+    }
+  })
+})
+
+// POST COMMENT
+app.post('/api/forum/:_id/comments', isUserLoggedIn, async (req, res)=>{
+  let forumArticle = await Forum.findById(req.params._id);
+  await Comment.create(req.body, (err, comment)=>{
+    if (err) {
+      res.json(err.message);
+    }else{
+      comment.author.id = req.user._id;
+      comment.author.username = req.user.username;
+      forumArticle.comments.push(comment);
+      comment.save();
+      forumArticle.save();
+      res.redirect('/api/forum/' + req.params._id)
     }
   })
 })
@@ -114,7 +133,7 @@ app.post('/register', async (req, res) => {
       return res.json(err.message);
     }else{
       passport.authenticate('local')(req, res, () => {
-        res.redirect('/');
+        res.redirect('/api/forum');
       });
     }
   }); 
@@ -122,8 +141,8 @@ app.post('/register', async (req, res) => {
 
 // LOGIN USER
 app.post("/login", passport.authenticate("local", 
-  { successRedirect: "/", 
-    failureRedirect: "/users/register", 
+  { successRedirect: "/api/forum", 
+    failureRedirect: "/register", 
     failureMessage: "Invalid username or password" 
   }
 ));
@@ -132,7 +151,7 @@ app.post("/login", passport.authenticate("local",
 app.get('/logout', async (req, res) => {
   await req.logOut();
   req.session.destroy();
-  res.redirect('/');
+  res.redirect('/api/forum');
 });
 
 // INVALID URL
