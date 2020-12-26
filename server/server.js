@@ -8,6 +8,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const User = require('./models/user');
 const ForumRoutes = require('./routes/ForumRoutes');
+const UserRoutes = require('./routes/UserRoutes');
 
 // CONNECT MONGODB
 const db = "forumdb";
@@ -39,57 +40,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 new ForumRoutes(app);
-
-// GET ALL USERS
-app.get('/api/users', async (req, res) => {
-  await User.find({}, 'username' & 'role', (err, users)=>{
-      res.json(users);
-  })
-})
-
-// GET USER BY ID
-app.get('/api/users/:_id', async (req, res)=>{
-  try {
-    let user = await User.findById(req.params._id);
-      if(!user) 
-        return res.status(404).send("User not found!");
-      res.send(user);
-  } catch(e) {
-      return res.status(404).send("User not found!");
-  }
-})
-
-// REGISTER USER
-app.post('/register', async (req, res) => {
-  let newUser= new User({
-      username: req.body.username,
-      role: req.body.role}),
-      passWord = req.body.password;
-  await User.register(newUser, passWord, (err, user) => {
-    if(err){
-      return res.json(err.message);
-    }else{
-      passport.authenticate('local')(req, res, () => {
-        res.redirect('/api/forum');
-      });
-    }
-  }); 
-});
-
-// LOGIN USER
-app.post("/login", passport.authenticate("local", 
-  { successRedirect: "/api/forum", 
-    failureRedirect: "/register", 
-    failureMessage: "Invalid username or password" 
-  }
-));
-
-// LOGOUT USER
-app.get('/logout', async (req, res) => {
-  await req.logOut();
-  req.session.destroy();
-  res.redirect('/api/forum');
-});
+new UserRoutes(app);
 
 // INVALID URL
 app.get('*', async (req, res) => {
