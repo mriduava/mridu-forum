@@ -6,9 +6,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-const Forum = require('./models/forum');
 const User = require('./models/user');
-const Comment = require('./models/comment');
+const ForumRoutes = require('./routes/ForumRoutes');
 
 // CONNECT MONGODB
 const db = "forumdb";
@@ -39,69 +38,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
-// CHECK IF THE USER IS LOGGED IN 
-const isUserLoggedIn = (req, res, next) => {
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect('/');
-}
-
-// GET ALL FORUM POSTS
-app.get('/api/forum', async (req, res) => {
-  await Forum.find({}, (err, post)=>{
-    if (err) {
-      res.json(err);
-    }else{
-      res.json(post);
-    }
-  })
-})
-
-// GET FORUM ARTICLE BY ID
-app.get('/api/forum/:_id', async (req, res)=>{
-  try {
-    let forumArticle = await Forum.findById(req.params._id)
-      .populate('comments');
-      if(!forumArticle) 
-        return res.status(404).send("Article not found!");
-      res.send(forumArticle);
-  } catch(e) {
-      return res.status(404).send("Article not found!");
-  }
-})
-
-// POST A NEW FORUM
-app.post('/api/forum/newpost', isUserLoggedIn, async (req, res) => {
-  await Forum.create(req.body, (err, text)=>{
-    if (err) {
-      res.json(err.message);
-    }else{
-      text.author.id = req.user._id;
-      text.author.username = req.user.username;
-      text.save();
-      res.redirect('/api/forum')
-    }
-  })
-})
-
-// POST COMMENT
-app.post('/api/forum/:_id/comments', isUserLoggedIn, async (req, res)=>{
-  let forumArticle = await Forum.findById(req.params._id);
-  await Comment.create(req.body, (err, comment)=>{
-    if (err) {
-      res.json(err.message);
-    }else{
-      comment.author.id = req.user._id;
-      comment.author.username = req.user.username;
-      forumArticle.comments.push(comment);
-      comment.save();
-      forumArticle.save();
-      res.redirect('/api/forum/' + req.params._id)
-    }
-  })
-})
+new ForumRoutes(app);
 
 // GET ALL USERS
 app.get('/api/users', async (req, res) => {
