@@ -13,15 +13,14 @@ class ForumRoutes{
     this.deleteForumArticle();
   }
 
-
   // CHECK IF THE USER IS LOGGED IN 
   isUserLoggedIn(req, res, next){
     if(req.isAuthenticated()){
         return next();
     }
-    res.redirect('/');
+    // res.redirect('/api/forum');
+    res.json('You are not logge in!');
   }
-
 
   // GET ALL FORUM POSTS
   getAllForumArticles(){
@@ -70,45 +69,67 @@ class ForumRoutes{
   // EDIT AN ARTICLE
   editForumArticle(){
     this.app.put('/api/forum/:_id', async (req, res) => {
-      await Forum.findByIdAndUpdate(req.params._id, req.body, (err, updated) =>{
-        if(err){
-          res.redirect("/api/forum");
+      try {
+        let forumArticle = await Forum.findById(req.params._id);
+        if (forumArticle) {
+          await Forum.findByIdAndUpdate(req.params._id, req.body, (err) =>{
+            if(err){
+              res.redirect("/api/forum");
+            }else{
+              res.redirect("/api/forum/" + req.params._id);
+            }
+          });
         }else{
-          res.redirect("/api/forum/" + req.params._id);
+          return res.status(404).send('This article is no longer exist!');
         }
-      });
+      } catch (e) {
+        return res.status(404).send('This article is no longer exist!');
+      }
     });
   }
 
   // DELETE AN ARTICLE
   deleteForumArticle(){
     this.app.delete('/api/forum/:_id', async (req, res) => {
-      await Forum.findByIdAndRemove(req.params._id, (err) => {
-        if(err){
-          res.redirect("/api/forum/" + req.params._id);
+      try {
+        let forumArticle = await Forum.findById(req.params._id);
+        if (forumArticle) {
+          await Forum.findByIdAndDelete(req.params._id, (err) => {
+            if(err){
+              res.redirect("/api/forum/" + req.params._id);
+            }else{
+              res.redirect("/api/forum");
+            }
+          });
         }else{
-          res.redirect("/api/forum");
+          return res.status(404).send('This article is no longer exist!');
         }
-      });
+      } catch (e) {
+        return res.status(404).send('This article is no longer exist!');
+      }
     });
   }
 
   // POST COMMENT
   postComment(){
     this.app.post('/api/forum/:_id/comments', this.isUserLoggedIn, async (req, res)=>{
-      let forumArticle = await Forum.findById(req.params._id);
-      await Comment.create(req.body, (err, comment)=>{
-        if (err) {
-          res.json(err.message);
-        }else{
-          comment.author.id = req.user._id;
-          comment.author.username = req.user.username;
-          forumArticle.comments.push(comment);
-          comment.save();
-          forumArticle.save();
-          res.redirect('/api/forum/' + req.params._id)
-        }
-      })
+      try {
+        let forumArticle = await Forum.findById(req.params._id);
+        await Comment.create(req.body, (err, comment)=>{
+          if (err) {
+            res.json(err.message);
+          }else{
+            comment.author.id = req.user._id;
+            comment.author.username = req.user.username;
+            forumArticle.comments.push(comment);
+            comment.save();
+            forumArticle.save();
+            res.redirect('/api/forum/' + req.params._id)
+          }
+        }) 
+      } catch(e) {
+          return res.status(404).send('This article is no longer exist!');
+      }
     })
   }
 
