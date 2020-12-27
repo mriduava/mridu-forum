@@ -9,6 +9,8 @@ class ForumRoutes{
     this.getForumArticleById();
     this.postNewForumArticle();
     this.postComment();
+    this.editForumArticle();
+    this.deleteForumArticle();
   }
 
 
@@ -63,6 +65,32 @@ class ForumRoutes{
         }
       })
     })
+  }
+
+  // EDIT AN ARTICLE
+  editForumArticle(){
+    this.app.put('/api/forum/:_id', async (req, res) => {
+      await Forum.findByIdAndUpdate(req.params._id, req.body, (err, updated) =>{
+        if(err){
+          res.redirect("/api/forum");
+        }else{
+          res.redirect("/api/forum/" + req.params._id);
+        }
+      });
+    });
+  }
+
+  // DELETE AN ARTICLE
+  deleteForumArticle(){
+    this.app.delete('/api/forum/:_id', async (req, res) => {
+      await Forum.findByIdAndRemove(req.params._id, (err) => {
+        if(err){
+          res.redirect("/api/forum/" + req.params._id);
+        }else{
+          res.redirect("/api/forum");
+        }
+      });
+    });
   }
 
   // POST COMMENT

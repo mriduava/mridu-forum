@@ -14,7 +14,9 @@ const UserRoutes = require('./routes/UserRoutes');
 const db = "forumdb";
 mongoose.connect('mongodb://localhost:27017/' + db, { 
   useUnifiedTopology: true,
-  useNewUrlParser: true 
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false
 });
 
 // BODY-PARSER CONFIG
