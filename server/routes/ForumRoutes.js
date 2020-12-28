@@ -18,8 +18,7 @@ class ForumRoutes{
     if(req.isAuthenticated()){
         return next();
     }
-    // res.redirect('/api/forum');
-    res.json('You are not logge in!');
+    res.json('You are not logged in!');
   }
 
   // GET ALL FORUM POSTS
@@ -52,7 +51,7 @@ class ForumRoutes{
 
   // POST A NEW FORUM
   postNewForumArticle(){
-    this.app.post('/api/forum/newpost', this.isUserLoggedIn, async (req, res) => {
+    this.app.post('/api/forum', this.isUserLoggedIn, async (req, res) => {
       await Forum.create(req.body, (err, text)=>{
         if (err) {
           res.json(err.message);
