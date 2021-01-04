@@ -9,6 +9,8 @@ class UserRoutes {
     this.registerUser();
     this.loginUser();
     this.logoutUser();
+    this.editUser();
+    this.deleteUser();
   }
 
   // GET ALL USERS
@@ -32,6 +34,42 @@ class UserRoutes {
           return res.status(404).send("User not found!");
       }
     })
+  }
+
+  // RESET USER PASSWORD
+  editUser(){
+    this.app.put('/api/users/:_id', async (req, res) => {
+      try {
+        let user = await User.findById(req.params._id);
+        await user.setPassword(req.body.password);
+        await user.save();
+        res.json('Password reset successful!')
+      } catch (e) {
+        return res.status(404).send('The user is no longer exist!');
+      }
+    });
+  }
+
+  // DELETE A USER
+  deleteUser(){
+    this.app.delete('/api/users/:_id', async (req, res) => {
+      try {
+        let existUser = await User.findById(req.params._id);
+        if (existUser) {
+          await User.findByIdAndDelete(req.params._id, (err) => {
+            if(err){
+              res.redirect("/api/users/" + req.params._id);
+            }else{
+              res.redirect("/api/users");
+            }
+          });
+        }else{
+          return res.status(404).send('The user is no longer exist!');
+        }
+      } catch (e) {
+        return res.status(404).send('Thie user is no longer exist!');
+      }
+    });
   }
 
   // REGISTER USER
