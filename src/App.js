@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Home from './pages/Home'
+import Thread from './components/Thread'
 import About from './pages/About'
 import ForumContextProvider from './contexts/ForumContextProvider'
 
@@ -9,6 +10,7 @@ const App = () => {
     <ForumContextProvider>
       <Router>
         <Route exact path="/" component={Home} />
+        <Route exact path="/forum" component={Thread} />
         <Route exact path="/about" component={About} />
       </Router>
     </ForumContextProvider>
