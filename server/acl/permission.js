@@ -1,4 +1,5 @@
 const Forum = require('../models/forum');
+const User = require('../models/user');
 
 module.exports = {
 
@@ -28,6 +29,28 @@ module.exports = {
         });
       }else{
         res.json('Please loggin first!');
+      }
+    }
+  },
+
+  // GET ACCESS TO CHANGE THE USER BY OWNER AND BY ADMIN
+  getPermissionToChangeUser(){
+    return (req, res, next) => {
+      if(req.isAuthenticated()){
+        User.findById(req.params._id, (err, user) => {
+          if(err){
+            res.json('The user does not exist!');
+          }else{
+            if((user._id.equals(req.user._id))||
+              (req.user.role === 'admin')){
+              next();
+            }else{
+              res.json('You are not allowed to make a change!');
+            }
+          }
+        });
+      }else{
+        res.json('Please login first!');
       }
     }
   }

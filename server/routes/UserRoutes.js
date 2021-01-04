@@ -1,5 +1,6 @@
 const passport = require('passport');
 const User = require('../models/user');
+const { isUserLoggedIn, getPermissionToChangeUser } = require('../acl/permission');
 
 class UserRoutes {
   constructor(expressApp){
@@ -15,7 +16,7 @@ class UserRoutes {
 
   // GET ALL USERS
   getAllUsers(){
-    this.app.get('/api/users', async (req, res) => {
+    this.app.get('/api/users', isUserLoggedIn, async (req, res) => {
       await User.find({}, 'username' & 'role', (err, users)=>{
           res.json(users);
       })
@@ -38,7 +39,7 @@ class UserRoutes {
 
   // RESET USER PASSWORD
   editUser(){
-    this.app.put('/api/users/:_id', async (req, res) => {
+    this.app.put('/api/users/:_id', getPermissionToChangeUser(), async (req, res) => {
       try {
         let user = await User.findById(req.params._id);
         await user.setPassword(req.body.password);
@@ -52,7 +53,7 @@ class UserRoutes {
 
   // DELETE A USER
   deleteUser(){
-    this.app.delete('/api/users/:_id', async (req, res) => {
+    this.app.delete('/api/users/:_id', getPermissionToChangeUser(), async (req, res) => {
       try {
         let existUser = await User.findById(req.params._id);
         if (existUser) {
@@ -60,18 +61,17 @@ class UserRoutes {
             if(err){
               res.redirect("/api/users/" + req.params._id);
             }else{
-              res.redirect("/api/users");
+              res.send("The user has been deleted successfully!");
             }
           });
         }else{
-          return res.status(404).send('The user is no longer exist!');
+          return res.status(404).send('The user does not exist!');
         }
       } catch (e) {
-        return res.status(404).send('Thie user is no longer exist!');
+        return res.status(404).send('Invalid user id!');
       }
     });
   }
-
   // REGISTER USER
   registerUser(){
     this.app.post('/register', async (req, res) => {
