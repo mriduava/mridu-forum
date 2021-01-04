@@ -1,4 +1,4 @@
-const Forum = require('../models/forum');
+const Thread = require('../models/thread');
 const User = require('../models/user');
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
   getPermissionToChange(){
     return (req, res, next) => {
       if(req.isAuthenticated()){
-        Forum.findById(req.params._id, (err, article) => {
+        Thread.findById(req.params._id, (err, article) => {
           if(err){
             res.json('This article does not exist!');
           }else{

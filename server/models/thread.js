@@ -1,7 +1,7 @@
 let mongoose = require("mongoose");
 
 let forumSchema = new mongoose.Schema({
-    title: {
+    topic: {
         type: String,
         required: true
     },
@@ -17,12 +17,12 @@ let forumSchema = new mongoose.Schema({
         },
         username: String
     },
-    comments: [
+    posts: [
         {
             type:mongoose.Schema.Types.ObjectId,
-            ref: 'Comment'
+            ref: 'Post'
         }
     ]
 });
 
-module.exports = mongoose.model('Forum', forumSchema);
+module.exports = mongoose.model('Thread', forumSchema);

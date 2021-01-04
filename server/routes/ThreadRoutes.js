@@ -1,37 +1,37 @@
-const Forum = require('../models/forum');
-const Comment = require('../models/comment');
+const Thread = require('../models/thread');
+const Post = require('../models/post');
 const { isUserLoggedIn, getPermissionToChange } = require('../acl/permission');
 
 class ForumRoutes{
 
   constructor(expressApp){
     this.app = expressApp
-    this.getAllForumArticles();
-    this.getForumArticleById();
-    this.postNewForumArticle();
-    this.postComment();
-    this.editForumArticle();
-    this.deleteForumArticle();
+    this.getAllForumThreads();
+    this.getForumThreadById();
+    this.postNewForumThread();
+    this.postThreadPost();
+    this.editForumThread();
+    this.deleteForumThread();
   }
 
-  // GET ALL FORUM POSTS
-  getAllForumArticles(){
+  // GET ALL FORUM THREADS
+  getAllForumThreads(){
     this.app.get('/api/forum', async (req, res) => {
-      await Forum.find({}, (err, post)=>{
+      await Thread.find({}, (err, thread)=>{
         if (err) {
           res.json(err);
         }else{
-          res.json(post);
+          res.json(thread);
         }
       })
     })
   }
 
-  // GET FORUM ARTICLE BY ID
-  getForumArticleById(){
+  // GET FORUM THREAD BY ID
+  getForumThreadById(){
     this.app.get('/api/forum/:_id', async (req, res)=>{
       try {
-        let forumArticle = await Forum.findById(req.params._id)
+        let forumArticle = await Thread.findById(req.params._id)
           .populate('comments');
           if(!forumArticle) 
             return res.status(404).send("Article not found!");
@@ -42,10 +42,10 @@ class ForumRoutes{
     })
   }
 
-  // POST A NEW FORUM
-  postNewForumArticle(){
+  // POST A NEW FORUM THREAD
+  postNewForumThread(){
     this.app.post('/api/forum', isUserLoggedIn, async (req, res) => {
-      await Forum.create(req.body, (err, text)=>{
+      await Thread.create(req.body, (err, text)=>{
         if (err) {
           res.json(err.message);
         }else{
@@ -58,13 +58,13 @@ class ForumRoutes{
     })
   }
 
-  // EDIT AN ARTICLE
-  editForumArticle(){
+  // EDIT A THREAD
+  editForumThread(){
     this.app.put('/api/forum/:_id', getPermissionToChange(), async (req, res) => {
       try {
-        let forumArticle = await Forum.findById(req.params._id);
+        let forumArticle = await Thread.findById(req.params._id);
         if (forumArticle) {
-          await Forum.findByIdAndUpdate(req.params._id, req.body, (err) =>{
+          await Thread.findByIdAndUpdate(req.params._id, req.body, (err) =>{
             if(err){
               res.redirect("/api/forum");
             }else{
@@ -80,13 +80,13 @@ class ForumRoutes{
     });
   }
 
-  // DELETE AN ARTICLE
-  deleteForumArticle(){
+  // DELETE A THREAD
+  deleteForumThread(){
     this.app.delete('/api/forum/:_id', getPermissionToChange(), async (req, res) => {
       try {
-        let forumArticle = await Forum.findById(req.params._id);
+        let forumArticle = await Thread.findById(req.params._id);
         if (forumArticle) {
-          await Forum.findByIdAndDelete(req.params._id, (err) => {
+          await Thread.findByIdAndDelete(req.params._id, (err) => {
             if(err){
               res.redirect("/api/forum/" + req.params._id);
             }else{
@@ -102,12 +102,12 @@ class ForumRoutes{
     });
   }
 
-  // POST COMMENT
-  postComment(){
-    this.app.post('/api/forum/:_id/comments', isUserLoggedIn, async (req, res)=>{
+  // POST THREAD POST
+  postThreadPost(){
+    this.app.post('/api/forum/:_id/posts', isUserLoggedIn, async (req, res)=>{
       try {
-        let forumArticle = await Forum.findById(req.params._id);
-        await Comment.create(req.body, (err, comment)=>{
+        let forumArticle = await Thread.findById(req.params._id);
+        await Post.create(req.body, (err, comment)=>{
           if (err) {
             res.json(err.message);
           }else{
