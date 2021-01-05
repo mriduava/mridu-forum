@@ -16,19 +16,21 @@ class ThreadRoutes{
 
   // GET FORUM THREAD BY ID
   getForumThreadById(){
-    this.app.get('/api/forums/:_id/threads/:_id', async (req, res)=>{
+    this.app.get('/api/forums/:_id1/:_id2', async (req, res)=>{
       try {
-        let forumSubject= await Forum.findById(req.params._id);
+        let forumSubject= await Forum.findById(req.params._id1);
           if(!forumSubject) {
             return res.status(404).send("Forum not found!");
           }else{
-            let threadTopic = await Thread.findById(req.params._id).populate('posts');
-            if(!threadTopic) 
+            let threadTopic = await Thread.findById(req.params._id2).populate('posts');
+            if(!threadTopic){
               return res.status(404).send("Thread not found!");
-            res.send(threadTopic);
+            }else{
+               res.send(threadTopic);
+            }
           }        
       } catch(e) {
-          return res.status(404).send("Thread not found!");
+          return res.status(404).send("Page not found!");
       }
     })
   }

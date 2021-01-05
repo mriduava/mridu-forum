@@ -11,8 +11,8 @@ const Home = () => {
       return (
         <Row key={'sub' + subject._id + i}>
           <Col xs="9" sm="6">
-            <Link to={`/${subject._id}`} 
-              onClick={()=>fetchFroumById(subject._id)}>
+            <Link to={`/${subject.subject.toLowerCase()}`} 
+              onClick={()=>fetchFroumById(subject._id, subject.subject)}>
               <h2 className="text-secondary mt-1">{subject.subject}</h2>
               <p className="text-primary">{subject.description}</p>
             </Link>       

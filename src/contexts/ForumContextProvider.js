@@ -5,6 +5,9 @@ export const ForumContext = createContext();
 const ForumContextProvider = (props) => {
   const [subjects, setSubjects] = useState()
   const [threads, setThreads] = useState()
+  const [thread, setThread] = useState()
+  const [subjectId, setSubjectId] = useState()
+  const [subjectName, setSubjectName] = useState()
 
   //FETCH ALL SUB-FORUM FROM API
   const fetchFroums = async () => {
@@ -14,10 +17,18 @@ const ForumContextProvider = (props) => {
   }
 
   //FETCH SUB-FORUM BY ID
-  const fetchFroumById = async (_id) => {
-    let singleSubject = await fetch(`/api/forums/${_id}`)
+  const fetchFroumById = async (_id, subjectName) => {
+    let singleSubject = await fetch(`/api/forums/${_id}`);
     singleSubject = await singleSubject.json();
     setThreads(singleSubject.threads)
+    setSubjectId(_id);
+    setSubjectName(subjectName);
+  }
+
+  const fetchThreadById = async (_id1, _id2) => {
+    let singleThread = await fetch(`/api/forums/${_id1}/${_id2}`)
+    singleThread= await singleThread.json();
+    setThread(singleThread)
   }
 
   useEffect(()=>{
@@ -27,7 +38,11 @@ const ForumContextProvider = (props) => {
   const values = {
     subjects,
     fetchFroumById,
-    threads
+    threads,
+    fetchThreadById,
+    thread,
+    subjectId,
+    subjectName
   }
 
   return (
