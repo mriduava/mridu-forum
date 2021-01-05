@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const ForumRoutes = require('./routes/ForumRoutes');
 const ThreadRoutes = require('./routes/ThreadRoutes');
 const UserRoutes = require('./routes/UserRoutes');
 const DependencyConfig = require('./configs/DependencyConfig')
@@ -8,6 +9,7 @@ const DependencyConfig = require('./configs/DependencyConfig')
 new DependencyConfig(app)
 
 // ALL ROUTES
+new ForumRoutes(app);
 new ThreadRoutes(app);
 new UserRoutes(app);
 

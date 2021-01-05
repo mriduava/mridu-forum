@@ -1,6 +1,6 @@
 let mongoose = require("mongoose");
 
-let forumSchema = new mongoose.Schema({
+let threadSchema = new mongoose.Schema({
     topic: {
         type: String,
         required: true
@@ -25,4 +25,4 @@ let forumSchema = new mongoose.Schema({
     ]
 });
 
-module.exports = mongoose.model('Thread', forumSchema);
+module.exports = mongoose.model('Thread', threadSchema);
