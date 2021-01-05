@@ -9,25 +9,28 @@ const ThreadList = () => {
   const mapThreads = () => {
     return threads.map((thread, i) => {
       return (
-        <Row key={'sub' + thread._id + i}>
+        <div key={'sub' + thread._id + i}>
+        <Row>
           <Col xs="9" sm="8">
-            <Link to={`/${subjectName}/${thread.topic}`} 
+            <Link to={`/${subjectName}/${thread.topic}`} style={{ textDecoration: 'none' }}
               onClick={()=>fetchThreadById(subjectId, thread._id)}>
-              <h2 className="text-secondary mt-1">{thread.topic}</h2>
-              <p className="text-primary">WRITER: {thread.author.username.toUpperCase()}</p>
+              <h4 className="text-secondary mt-1 pb-0">{thread.topic}</h4>
+              <p className="text-primary mt-0 pt-0">Writer: {thread.author.username.toUpperCase()}</p>
             </Link>       
           </Col>
-          <Col xs="3" sm="4" className="text-right mt-5 d-none d-lg-block">{thread.posts.length}</Col>
-        </Row>      
+          <Col xs="3" sm="4" className="text-right mt-2 d-none d-lg-block">{thread.posts.length}</Col>
+        </Row>
+        <hr/>
+        </div>    
       )
     })
   }
 
   return (
     <Container className="themed-container" fluid="xl">
-      <Row className="text-light bg-secondary py-1">
-        <Col xs="9" sm="8"><h3>Threads</h3></Col>
-        <Col xs="3" sm="4" className="text-lg-right d-none d-lg-block"><h3>Answers</h3></Col>
+      <Row className="text-light bg-secondary pt-2 mb-3">
+        <Col xs="9" sm="8"><h4>Threads</h4></Col>
+        <Col xs="3" sm="4" className="text-lg-right d-none d-lg-block"><h4>Answers</h4></Col>
       </Row>
       {threads && mapThreads()}
     </Container>
