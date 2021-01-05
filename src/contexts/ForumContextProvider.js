@@ -3,22 +3,22 @@ import React, {createContext, useState, useEffect } from 'react'
 export const ForumContext = createContext();
 
 const ForumContextProvider = (props) => {
-  const [articles, setArticles] = useState()
+  const [subjects, setSubjects] = useState()
 
   //FETCH ALL FORUM ARTICLES FROM API
-  const fetchFroumArticles = async () => {
-    let allArticles = await fetch('/api/forum')
-    allArticles = await allArticles.json();
-    setArticles(allArticles)
+  const fetchFroums = async () => {
+    let allSubjects = await fetch('/api/forums')
+    allSubjects = await allSubjects.json();
+    setSubjects(allSubjects)
   }
 
-    useEffect(()=>{
-    fetchFroumArticles()
+  useEffect(()=>{
+    fetchFroums()
   }, [])
 
   const values = {
-    fetchFroumArticles,
-    articles
+    fetchFroums,
+    subjects
   }
 
   return (
