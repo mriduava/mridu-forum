@@ -10,7 +10,7 @@ const App = () => {
     <ForumContextProvider>
       <Router>
         <Route exact path="/" component={Home} />
-        <Route exact path="/forum" component={Thread} />
+        <Route exact path="/:id" component={Thread} />
         <Route exact path="/about" component={About} />
       </Router>
     </ForumContextProvider>

@@ -4,14 +4,15 @@ import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'reactstrap';
 
 const Home = () => {
-  const { subjects } = useContext(ForumContext)
+  const { subjects, fetchFroumById } = useContext(ForumContext)
 
   const mapSubjects = () => {
     return subjects.map((subject, i) => {
       return (
-        <Row>
+        <Row key={'sub' + subject._id + i}>
           <Col xs="9" sm="6">
-            <Link to={`/${subject.subject.toLowerCase()}`}>
+            <Link to={`/${subject._id}`} 
+              onClick={()=>fetchFroumById(subject._id)}>
               <h2 className="text-secondary mt-1">{subject.subject}</h2>
               <p className="text-primary">{subject.description}</p>
             </Link>       
