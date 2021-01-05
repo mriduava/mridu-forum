@@ -104,23 +104,32 @@ class ThreadRoutes{
 
   // POST THREAD POST
   postThreadPost(){
-    this.app.post('/api/forums/:_id/threads/:_id/posts', isUserLoggedIn, async (req, res)=>{
+    this.app.post('/api/forums/:_id1/:_id2', async (req, res)=>{
       try {
-        let forumArticle = await Thread.findById(req.params._id);
-        await Post.create(req.body, (err, comment)=>{
-          if (err) {
-            res.json(err.message);
+        let forumSubject= await Forum.findById(req.params._id1);
+          if(!forumSubject) {
+            return res.status(404).send("Forum not found!");
           }else{
-            comment.author.id = req.user._id;
-            comment.author.username = req.user.username;
-            forumArticle.comments.push(comment);
-            comment.save();
-            forumArticle.save();
-            res.redirect('/api/forums/' + req.params._id)
-          }
-        }) 
+            let threadTopic = await Thread.findById(req.params._id2);
+            if(!threadTopic){
+              return res.status(404).send("Thread not found!");
+            }else{
+              await Post.create(req.body, (err, post)=>{
+                if (err) {
+                  res.json(err.message);
+                }else{
+                  post.author.id = req.user._id;
+                  post.author.username = req.user.username;
+                  threadTopic.posts.push(post);
+                  post.save();
+                  threadTopic.save();
+                  res.json('Post submitting successful!')
+                }
+              }) 
+            }
+          }        
       } catch(e) {
-          return res.status(404).send('This article is no longer exist!');
+          return res.status(404).send("Page not found!");
       }
     })
   }
