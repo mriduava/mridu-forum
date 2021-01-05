@@ -28,13 +28,13 @@ class ForumRoutes{
   getForumSubjectById(){
     this.app.get('/api/forums/:_id', async (req, res)=>{
       try {
-        let forumArticle = await Forum.findById(req.params._id)
+        let forumSubject= await Forum.findById(req.params._id)
           .populate('threads');
-          if(!forumArticle) 
-            return res.status(404).send("Thread not found!");
-          res.send(forumArticle);
+          if(!forumSubject) 
+            return res.status(404).send("Forum not found!");
+          res.send(forumSubject);
       } catch(e) {
-          return res.status(404).send("Thread not found!");
+          return res.status(404).send("Forum not found!");
       }
     })
   }

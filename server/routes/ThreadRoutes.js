@@ -7,7 +7,6 @@ class ThreadRoutes{
 
   constructor(expressApp){
     this.app = expressApp
-    this.getAllForumThreads();
     this.getForumThreadById();
     this.postNewForumThread();
     this.postThreadPost();
@@ -15,53 +14,28 @@ class ThreadRoutes{
     this.deleteForumThread();
   }
 
-  // GET ALL FORUM THREADS
-  getAllForumThreads(){
-    this.app.get('/api/forum/:_id/threads', async (req, res) => {
-      await Thread.find({}, (err, thread)=>{
-        if (err) {
-          res.json(err);
-        }else{
-          res.json(thread);
-        }
-      })
-    })
-  }
-
   // GET FORUM THREAD BY ID
   getForumThreadById(){
     this.app.get('/api/forums/:_id/threads/:_id', async (req, res)=>{
       try {
-        let forumArticle = await Thread.findById(req.params._id)
-          .populate('posts');
-          if(!forumArticle) 
-            return res.status(404).send("Article not found!");
-          res.send(forumArticle);
+        let forumSubject= await Forum.findById(req.params._id);
+          if(!forumSubject) {
+            return res.status(404).send("Forum not found!");
+          }else{
+            let threadTopic = await Thread.findById(req.params._id).populate('posts');
+            if(!threadTopic) 
+              return res.status(404).send("Thread not found!");
+            res.send(threadTopic);
+          }        
       } catch(e) {
-          return res.status(404).send("Article not found!");
+          return res.status(404).send("Thread not found!");
       }
     })
   }
 
   // POST A NEW FORUM THREAD
-  // postNewForumThread(){
-  //   this.app.post('/api/forums/:_id/threads', isUserLoggedIn, async (req, res) => {
-  //     await Thread.create(req.body, (err, text)=>{
-  //       if (err) {
-  //         res.json(err.message);
-  //       }else{
-  //         text.author.id = req.user._id;
-  //         text.author.username = req.user.username;
-  //         text.save();
-  //         res.redirect('/api/forums')
-  //       }
-  //     })
-  //   })
-  // }
-
-  // POST A NEW FORUM THREAD
   postNewForumThread(){
-    this.app.post('/api/forums/:_id/threads', isUserLoggedIn, async (req, res)=>{
+    this.app.post('/api/forums/:_id', isUserLoggedIn, async (req, res)=>{
       try {
         let forumSubject = await Forum.findById(req.params._id);
         await Thread.create(req.body, (err, thread)=>{
@@ -82,7 +56,6 @@ class ThreadRoutes{
     })
   }
 
-
   // EDIT A THREAD
   editForumThread(){
     this.app.put('/api/forums/:_id/threads/:_id', getPermissionToChange(), async (req, res) => {
@@ -97,10 +70,10 @@ class ThreadRoutes{
             }
           });
         }else{
-          return res.status(404).send('This article is no longer exist!');
+          return res.status(404).send('This thread is no longer exist!');
         }
       } catch (e) {
-        return res.status(404).send('This article is no longer exist!');
+        return res.status(404).send('This thread is no longer exist!');
       }
     });
   }

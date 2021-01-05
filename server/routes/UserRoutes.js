@@ -84,7 +84,7 @@ class UserRoutes {
           return res.json(err.message);
         }else{
           passport.authenticate('local')(req, res, () => {
-            res.redirect('/api/forum');
+            res.json('User registration successful!');
           });
         }
       }); 
@@ -94,7 +94,7 @@ class UserRoutes {
   // LOGIN USER
   loginUser(){
     this.app.post("/login", passport.authenticate("local", 
-      { successRedirect: "/api/forum", 
+      { successRedirect: "/api/forums", 
         failureRedirect: "/register", 
         failureMessage: "Invalid username or password" 
       }
