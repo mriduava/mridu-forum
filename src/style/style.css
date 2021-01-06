@@ -23,7 +23,7 @@ html {
 
 .App{
   display: flex;
-  min-height: 98.5vh;
+  min-height: 93.1vh;
   flex-direction: column; 
 }
 

@@ -18,7 +18,7 @@ const ForumNavbar= (props) => {
               <Link className="text-dark mr-4" to="/register">REGISTER</Link>
             </NavItem>
             <NavItem>
-              <Link className="text-dark" to="/login">LOGIN</Link>
+              <Link className="text-dark" to="/signin">SIGN IN</Link>
             </NavItem>
           </Nav>
         </Collapse>

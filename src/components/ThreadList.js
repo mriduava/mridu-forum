@@ -28,7 +28,7 @@ const ThreadList = () => {
 
   return (
     <Container className="themed-container" fluid="xl">
-      <Row className="text-light bg-secondary pt-2 mb-3">
+      <Row className="text-light bg-info pt-2 mb-3">
         <Col xs="9" sm="8"><h4>Threads</h4></Col>
         <Col xs="3" sm="4" className="text-lg-right d-none d-lg-block"><h4>Answers</h4></Col>
       </Row>

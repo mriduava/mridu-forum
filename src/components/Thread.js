@@ -1,6 +1,5 @@
 import React, {useContext} from 'react'
 import { ForumContext } from '../contexts/ForumContextProvider'
-import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'reactstrap';
 import moment from 'moment'
 
@@ -14,7 +13,7 @@ const Thread = () => {
   const mapThreads = () => {
       return (
         <div key={'sub' + thread._id}>
-          <Row className="text-light bg-secondary pt-2">
+          <Row className="text-light bg-success pt-2">
             <Col xs="9" sm="8"><h4>Topic: {thread.topic}</h4></Col>
             <Col xs="3" sm="4" className="text-lg-right d-none d-lg-block"><h4>{thread.posts.length} Comments</h4></Col>
           </Row>
