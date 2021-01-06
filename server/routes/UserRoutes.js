@@ -93,12 +93,22 @@ class UserRoutes {
 
   // LOGIN USER
   loginUser(){
-    this.app.post("/login", passport.authenticate("local", 
-      { successRedirect: "/api/forums", 
-        failureRedirect: "/register", 
-        failureMessage: "Invalid username or password" 
-      }
-    ));
+    this.app.post('/login', (req, res, next) => {  
+      passport.authenticate('local', (err, user, info) => { 
+        if (err) { 
+          return next(err); 
+        } 
+        if (!user) { 
+          return res.status(404).send("Username or password incorrect!"); 
+        } 
+        req.logIn(user, (err) => { 
+          if (err) { 
+            return next(err); 
+          } 
+          return res.status(200).send('Sign in successful!'); 
+        }); 
+      })(req, res, next); 
+    });
   }
 
   // LOGOUT USER
