@@ -8,10 +8,12 @@ import Register from './pages/Register'
 import Signin from './pages/Signin'
 import About from './pages/About'
 import ForumContextProvider from './contexts/ForumContextProvider'
+import UserContextProvider from './contexts/UserContextProvider'
 
 const App = () => {
   return (
     <div className="App">
+      <UserContextProvider>
       <ForumContextProvider>
         <Router>         
           <Navbar/>
@@ -28,6 +30,7 @@ const App = () => {
           <Footer/>              
         </Router>
       </ForumContextProvider>
+      </UserContextProvider>
     </div>
   );
 }

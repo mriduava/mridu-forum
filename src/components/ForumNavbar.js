@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from "react-router-dom";
+import { UserContext } from '../contexts/UserContextProvider'
 import {Container, Collapse, Navbar, NavbarToggler, Nav, NavItem} from 'reactstrap';
 
 const ForumNavbar= (props) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const toggle = () => setIsOpen(!isOpen);
+
+  const { loggedIn, setLoggedIn} = useContext(UserContext)
+
+  const logoutUser = async () => {
+    await fetch('/logout')
+    setLoggedIn(null)
+  }
 
   return (
     <Container className="px-0">
@@ -14,13 +21,23 @@ const ForumNavbar= (props) => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
-            <NavItem>
-              <Link className="text-dark mr-4" to="/register">REGISTER</Link>
-            </NavItem>
-            <NavItem>
-              <Link className="text-dark" to="/signin">SIGN IN</Link>
-            </NavItem>
-          </Nav>
+            {!loggedIn?(
+            <>
+              <NavItem>
+                <Link className="text-dark mr-4" to="/register">REGISTER</Link>
+              </NavItem>
+              <NavItem>
+                <Link className="text-dark" to="/signin">SIGN IN</Link>
+              </NavItem>
+            </>
+            ):(
+            <>
+              <NavItem>
+                <Link className="text-dark" onClick={logoutUser} to="/"> LOGOUT</Link>
+              </NavItem>
+            </>
+            )}
+          </Nav>          
         </Collapse>
       </Navbar>
     </Container>

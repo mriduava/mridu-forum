@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
+import { UserContext } from '../contexts/UserContextProvider'
 import { Container, Row, Col, Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 
 const Signin = (props) => {
+  const { setLoggedIn } = useContext(UserContext)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
@@ -21,6 +23,7 @@ const Signin = (props) => {
     })
     .then(res => {
       if (res.status === 200) {
+        setLoggedIn(res)
         props.history.push('/')
       } else {
         setMessage("Username or Password incorrect!")
