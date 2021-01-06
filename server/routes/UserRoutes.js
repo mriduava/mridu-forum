@@ -10,7 +10,7 @@ class UserRoutes {
     this.registerUser();
     this.loginUser();
     this.logoutUser();
-    this.editUser();
+    this.resetPassword();
     this.deleteUser();
   }
 
@@ -38,7 +38,7 @@ class UserRoutes {
   }
 
   // RESET USER PASSWORD
-  editUser(){
+  resetPassword(){
     this.app.put('/api/users/:_id', getPermissionToChangeUser(), async (req, res) => {
       try {
         let user = await User.findById(req.params._id);
@@ -72,19 +72,22 @@ class UserRoutes {
       }
     });
   }
+
   // REGISTER USER
   registerUser(){
     this.app.post('/register', async (req, res) => {
+      let role = ""
+      let admin = await User.findOne({"role": "admin"})
+      !admin? role += "admin":role += "general"
       let newUser= new User({
-          username: req.body.username,
-          role: req.body.role}),
+          username: req.body.username, role}),
           passWord = req.body.password;
       await User.register(newUser, passWord, (err, user) => {
         if(err){
-          return res.json(err.message);
+          return res.status(404).send(err.message);
         }else{
           passport.authenticate('local')(req, res, () => {
-            res.json('User registration successful!');
+            res.status(200).send('User registration successful!');
           });
         }
       }); 
@@ -99,7 +102,7 @@ class UserRoutes {
           return next(err); 
         } 
         if (!user) { 
-          return res.status(404).send("Username or password incorrect!"); 
+          return res.status(404).send(err); 
         } 
         req.logIn(user, (err) => { 
           if (err) { 
@@ -119,6 +122,7 @@ class UserRoutes {
       res.redirect('/api/forum');
     });
   }
+
 }
 
 module.exports = UserRoutes;

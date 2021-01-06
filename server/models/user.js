@@ -9,7 +9,7 @@ let userSchema = new mongoose.Schema({
     password: String,
     role: {
         type: String, 
-        enum: ['admin', 'moderator', 'general'], 
+        enum: ['admin', 'moderator', 'general'],
         required: true
     }
 });

@@ -12,7 +12,7 @@ const Signin = (props) => {
       username: username,
       password: password
     }
-    fetch('/login', {
+    await fetch('/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
       headers: {
@@ -37,21 +37,14 @@ const Signin = (props) => {
           <Form onSubmit={loginUser}>
             <FormGroup>
               <Label for="username">Username</Label>
-              <Input value={username} 
-                onChange={e=>setUsername(e.target.value)} 
-                type="username" 
-                name="username" 
-                id="username" 
-                required/>
+              <Input type="username" name="username" id="username" 
+                value={username} onChange={e=>setUsername(e.target.value)} required/>
               <FormFeedback valid>Username is not correct!</FormFeedback>
             </FormGroup>
             <FormGroup>
               <Label for="password">Password</Label>
-              <Input value={password} 
-                onChange={e=>setPassword(e.target.value)} 
-                type="password" name="password" 
-                id="password" 
-                required/>
+              <Input type="password" name="password" id="password"
+                value={password} onChange={e=>setPassword(e.target.value)} required/>
               <FormFeedback>Wrong password!</FormFeedback>
             </FormGroup>
             <button className="btn btn-block btn-outline-success mt-4">SUBMIT</button>
