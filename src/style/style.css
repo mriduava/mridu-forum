@@ -36,3 +36,7 @@ html {
   height: 50px;
   text-align: center;
 }
+
+.found_user:hover{
+  background-color: #ffeec8;
+}
