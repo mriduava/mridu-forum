@@ -1,12 +1,13 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Container, Row, Col, Form, FormGroup, Input, FormFeedback } from 'reactstrap';
 
 const MyPage = () => {
   const [search, setSearch] = useState('')
   const [user, setUser] = useState(null)
-  const [selectedRole, setSelectedRole] = useState(null);
+  const [selectedRole, setSelectedRole] = useState('');
   const [userName, setUserName] = useState(null);
   const [userRole, setUserRole] = useState(null);
+  const [message, setMessage] = useState(null);
 
   const searchUser = async (e) => {
     e.preventDefault();    
@@ -36,7 +37,28 @@ const MyPage = () => {
   const transferUserInfo =(username, role) => {
     setUserName(username);
     setUserRole(role);
-    setUser(null)
+    setUser(null);
+    setSelectedRole(role);
+  }
+
+  const resetUserRole = async (e) => {
+    e.preventDefault();    
+    await fetch(`/api/users?username=${userName}`, {
+      method: 'PUT',
+      body: JSON.stringify({role:selectedRole}),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      if (res.status === 200) {
+        setUserName(null)
+        setMessage('Role setting successful!')
+      } else {
+        setMessage("Role setting failed!")
+      }
+    })
+
   }
 
   const dispToModifyUser = ()=>{
@@ -50,14 +72,14 @@ const MyPage = () => {
           <h5>Username</h5>
           <div>
             <h2 className="text-info mt-2 p-0">{userName}</h2>
-            <p className="text-success mt-0 pt-0">Present Role: {userRole.toUpperCase()}</p>
+            <p className="text-success mt-0 pt-0">Present Role: {userRole}</p>
           </div>
           <button className="btn btn-outline-danger mt-3" 
               style={{height: "30px", width: "150px", fontSize: "16px", paddingTop: "2px"}}>Delete User
           </button>
         </Col>
         <Col lg="9">
-          <Form>
+          <Form onSubmit={resetUserRole}>
             <h5 className="py-0">Set role</h5>
             <div className="form-check">
               <input type="radio" className="mt-2" value="admin" 
@@ -94,6 +116,21 @@ const MyPage = () => {
     )
   }
 
+  const displayAlert = () => {
+    return(
+      <div className="alert alert-warning alert-dismissible fade show" role="alert">{message}</div>
+    )
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (message!==null) {
+        setMessage(null)
+      }
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [message]);
+
   return (
      <Container className="border border-warning pb-5" style={{minHeight:"80vh"}}>
       <h4 className="text-dark font-weight-bold pt-5">ADMIN</h4>
@@ -119,6 +156,7 @@ const MyPage = () => {
       {user&&dispUserInfo()}
       <hr/>
       {userName&&dispToModifyUser()}
+      {message&&displayAlert()}
     </Container>
   )
 }

@@ -13,6 +13,7 @@ class UserRoutes {
     this.resetPassword();
     this.deleteUser();
     this.searchUser();
+    this.setUserRole();
   }
 
   // GET ALL USERS
@@ -97,8 +98,8 @@ class UserRoutes {
 
   // LOGIN USER
   loginUser(){
-    this.app.post('/login', (req, res, next) => {  
-      passport.authenticate('local', (err, user, info) => { 
+    this.app.post('/login', async (req, res, next) => {  
+      await passport.authenticate('local', (err, user, info) => { 
         if (err) { 
           return next(err); 
         } 
@@ -124,20 +125,36 @@ class UserRoutes {
     });
   }
 
-   //SEARCH USER
+  //SEARCH USER
   searchUser(){
-    this.app.get("/search/user", function (req, res) {
+    this.app.get("/search/user", async (req, res) => {
       let query = {
         $or: [{ username: req.query.username },
           { role: req.query.role}]
       }
-      User.find(query, function (err, user) {
+      await User.find(query, function (err, user) {
         if (err) {
             console.log(err);
         } else {
             res.json(user);
         }
       });
+    });
+  }
+
+  // SET USER ROLE
+  setUserRole(){
+    this.app.put('/api/users', async (req, res) => {
+      await User.updateOne(
+        { username: req.query.username },
+        { $set: { role: req.body.role } }, (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.json(result);
+          }
+        }
+      );
     });
   }
 
