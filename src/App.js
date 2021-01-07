@@ -7,6 +7,7 @@ import Footer from './components/ForumFooter'
 import Register from './pages/Register'
 import Signin from './pages/Signin'
 import About from './pages/About'
+import MyPage from './pages/MyPage'
 import ForumContextProvider from './contexts/ForumContextProvider'
 import UserContextProvider from './contexts/UserContextProvider'
 
@@ -23,6 +24,7 @@ const App = () => {
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/signin" component={Signin} />
                 <Route exact path="/about" component={About} />
+                <Route exact path="/mypage" component={MyPage} />
                 <Route exact path="/:id" component={ThreadList} />
                 <Route exact path="/:id1/:id2" component={Thread} />
               </Switch>

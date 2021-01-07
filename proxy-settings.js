@@ -26,6 +26,7 @@ module.exports = {
     return url.indexOf('/api/') === 0
     || url.indexOf('/login') === 0
     || url.indexOf('/logout') === 0
-    || url.indexOf('/register') === 0;
+    || url.indexOf('/register') === 0
+    || url.indexOf('/search/') === 0;
   }
 };

@@ -12,6 +12,7 @@ class UserRoutes {
     this.logoutUser();
     this.resetPassword();
     this.deleteUser();
+    this.searchUser();
   }
 
   // GET ALL USERS
@@ -120,6 +121,23 @@ class UserRoutes {
       await req.logOut();
       req.session.destroy();
       res.redirect('/api/forum');
+    });
+  }
+
+   //SEARCH USER
+  searchUser(){
+    this.app.get("/search/user", function (req, res) {
+      let query = {
+        $or: [{ username: req.query.username },
+          { role: req.query.role}]
+      }
+      User.find(query, function (err, user) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(user);
+        }
+      });
     });
   }
 
