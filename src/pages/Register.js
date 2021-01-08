@@ -3,7 +3,7 @@ import { UserContext } from '../contexts/UserContextProvider'
 import { Container, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 
 const Register = (props) => {
-  const { setUser} = useContext(UserContext)
+  const { setUser } = useContext(UserContext)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
@@ -21,14 +21,19 @@ const Register = (props) => {
         'Content-Type': 'application/json'
       }
     })
-    .then(res => {
-      if (res.status === 200) {
-        setUser(res)
-        props.history.push('/mypage')
+    .then((response) => {
+      if (response.ok) {
+        response = response.json();
+        Promise.resolve(response)
+        .then(user => setUser(user))          
+        props.history.push('/mypage') 
       } else {
-        setMessage("This username is already taken!")
+        setMessage("Username or Password incorrect!")
       }
     })
+    .catch((error) => {
+      return Promise.reject()
+    });
   }
 
   return (

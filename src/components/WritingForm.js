@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import { ForumContext } from '../contexts/ForumContextProvider'
 import { Form, FormGroup, Input } from 'reactstrap';
 
@@ -13,8 +13,12 @@ const WritingForm = () => {
     })
   }
 
+  useEffect(()=>{
+    mapSubjects()
+  }, [])
+
   return ( 
-    <Form className="mt-3">
+    <Form className="mt-3 mb-4">
       <FormGroup>
         <p className="py-0 m-0 text-secondary" style={{fontSize: "14px"}}>Select a sub-forum</p>
         <Input type="select" name="select" id="exampleSelect" required>
