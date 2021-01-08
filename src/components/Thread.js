@@ -1,12 +1,15 @@
 import React, {useContext, useState} from 'react'
 import { ForumContext } from '../contexts/ForumContextProvider'
+import { UserContext } from '../contexts/UserContextProvider'
 import { Container, Row, Col, Form, FormGroup, Input } from 'reactstrap';
 import moment from 'moment'
 
 const Thread = () => {
   const { thread, subjectId, threadId } = useContext(ForumContext)
+  const { user } = useContext(UserContext)
   const [comment, setComment] = useState('')
   const [message, setMessage] = useState('')
+  const [showForm, setShowForm] = useState(false)
 
   const timeFormat = (time) => {
     return moment(time).format("YYYY-MM-DD, H:mm");
@@ -14,7 +17,6 @@ const Thread = () => {
 
   const writeComment = async (e) => {
     e.preventDefault();
-
     await fetch(`/api/forums/${subjectId}/${threadId}`, {
       method: 'POST',
       body: JSON.stringify({text:comment}),
@@ -25,19 +27,55 @@ const Thread = () => {
     .then((response) => {
       response = response.json();
       if (response.ok) {
+        toggleButton()
         response = response.json();
         Promise.resolve(response)
         .then(message => setMessage(message));
-        setComment(''); 
-        console.log(message);         
+        setComment('');  
+        setShowForm(false)     
       } else {
         setMessage("You are not logged in!")
-        console.log(message);
       }
     })
     .catch((error) => {
       return Promise.reject()
     });
+  }
+
+  const toggleButton = () => {
+    (!showForm)?
+      setShowForm(true):
+      setShowForm(false)
+  }
+
+  const renderForm = ()=>{
+    return(
+      <>
+        <Row>  
+          <Col xs="3" sm="3">
+            <h5 className="text-secondary">{user.username.toUpperCase()}</h5>
+            <p className="mb-0 text-warning">is going to reply</p>
+          </Col>       
+          <Col xs="9" sm="9">
+            <Form onSubmit={writeComment}>
+              <FormGroup>
+                <textarea name="text" id="text" placeholder="Write your comment here..." 
+                  className="form-control" pattern=".{100, 5000}" required minlength="100" 
+                  value={comment} onChange={e=>setComment(e.target.value)}></textarea>
+              </FormGroup>
+              <button className="btn btn-outline-success mt-0" 
+                style={{height: "26px", width: "162px", fontSize: "13px", paddingTop: "2px"}}>Submit Comment
+              </button>
+            </Form>
+            <button className="btn btn-outline-danger mt-0" onClick={()=>toggleButton()}
+              style={{position: "relative", left: 170, top: -25, height: "26px", 
+              width: "120px", fontSize: "13px", paddingTop: "2px"}}>Cancel
+            </button>          
+          </Col>
+        </Row>
+        <hr/>
+      </>
+    )
   }
 
   const mapThreads = () => {
@@ -54,40 +92,37 @@ const Thread = () => {
             </Col>
             <Col xs="9" sm="9">
               <p className="mb-0">{timeFormat(thread.created)}</p>
-              <p className="text-dark mt-1 text-justify">{thread.text}</p>
-              <hr className="p-0 m-0"/>
-
-              <button className="btn btn-outline-success mt-3 mr-2" 
-                  style={{height: "26px", width: "90px", fontSize: "13px", paddingTop: "2px"}}>Reply
-              </button>
-              <button className="btn btn-outline-primary mt-3 mr-2" 
-                  style={{height: "26px", width: "90px", fontSize: "13px", paddingTop: "2px"}}>Edit
-              </button>
-              <button className="btn btn-outline-danger mt-3" 
-                  style={{height: "26px", width: "90px", fontSize: "13px", paddingTop: "2px"}}>Delete
-              </button> 
+              <p className="text-dark mt-1 text-justify">{thread.text}</p>         
+              {(() => {
+                if (user!==null) {
+                  return (
+                    <>
+                    <hr className="p-0 m-0"/>
+                    <button className="btn btn-outline-success mt-3 mr-2" onClick={()=>toggleButton()}
+                        style={{height: "26px", width: "90px", fontSize: "13px", paddingTop: "2px"}}>Reply
+                    </button>
+                    </>
+                  )
+                }
+              })()}
+              {(() => {      
+                if (user !==null && (user.id === thread.author.id || user.role === 'admin' || user.role === 'moderator')) {
+                  return (
+                    <>
+                    <button className="btn btn-outline-primary mt-3 mr-2" 
+                        style={{height: "26px", width: "90px", fontSize: "13px", paddingTop: "2px"}}>Edit
+                    </button>
+                    <button className="btn btn-outline-danger mt-3" 
+                        style={{height: "26px", width: "90px", fontSize: "13px", paddingTop: "2px"}}>Delete
+                    </button> 
+                    </>
+                  )
+                } 
+              })()}
             </Col>  
           </Row>
            <hr/>
-          <Row>  
-            <Col xs="3" sm="3">
-            </Col>       
-            <Col xs="9" sm="9">
-              <Form onSubmit={writeComment}>
-                <FormGroup>
-                  <Input type="textarea" name="text" id="text" placeholder="Write your comment here..." 
-                    value={comment} onChange={e=>setComment(e.target.value)} required/>
-                </FormGroup>
-                <button className="btn btn-outline-success mt-0" 
-                  style={{height: "26px", width: "162px", fontSize: "13px", paddingTop: "2px"}}>Submit Comment
-                </button>
-              </Form>
-              <button className="btn btn-outline-danger mt-0" 
-                style={{position: "absolute", left: 185, top: 78, height: "26px", width: "120px", fontSize: "13px", paddingTop: "2px"}}>Cancel
-              </button>          
-            </Col>
-          </Row>
-          <hr/>
+           {showForm&&renderForm()}         
         </div>     
       )
   }
