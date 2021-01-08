@@ -49,7 +49,7 @@ class ThreadRoutes{
             forumSubject.threads.push(thread);
             thread.save();
             forumSubject.save();
-            res.redirect('/api/forums/' + req.params._id)
+            res.status(200).send('Thread submission successful!')
           }
         }) 
       } catch(e) {
@@ -104,7 +104,7 @@ class ThreadRoutes{
 
   // POST THREAD POST
   postThreadPost(){
-    this.app.post('/api/forums/:_id1/:_id2', async (req, res)=>{
+    this.app.post('/api/forums/:_id1/:_id2', isUserLoggedIn, async (req, res)=>{
       try {
         let forumSubject= await Forum.findById(req.params._id1);
           if(!forumSubject) {
