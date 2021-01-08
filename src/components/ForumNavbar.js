@@ -6,12 +6,11 @@ import {Container, Collapse, Navbar, NavbarToggler, Nav, NavItem} from 'reactstr
 const ForumNavbar= (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
-
-  const { loggedIn, setLoggedIn} = useContext(UserContext)
+  const { user, setUser} = useContext(UserContext)
 
   const logoutUser = async () => {
     await fetch('/logout')
-    setLoggedIn(null)
+    setUser(null)
   }
 
   return (
@@ -21,7 +20,7 @@ const ForumNavbar= (props) => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
-            {!loggedIn?(
+            {!user?(
             <>
               <NavItem>
                 <Link className="text-dark mr-4" to="/register">REGISTER</Link>
@@ -32,6 +31,9 @@ const ForumNavbar= (props) => {
             </>
             ):(
             <>
+              <NavItem>
+                <Link className="text-dark mr-4" to="/mypage">MY PAGE</Link>
+              </NavItem>
               <NavItem>
                 <Link className="text-dark" onClick={logoutUser} to="/"> LOGOUT</Link>
               </NavItem>

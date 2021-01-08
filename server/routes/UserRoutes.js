@@ -104,13 +104,14 @@ class UserRoutes {
           return next(err); 
         } 
         if (!user) { 
-          return res.status(404).send(err); 
+          return res.status(404).send("Username or Password incorrect!"); 
         } 
         req.logIn(user, (err) => { 
           if (err) { 
             return next(err); 
           } 
-          return res.status(200).send('Sign in successful!'); 
+          return res.status(200)
+            .send({username: user.username, role: user.role}); 
         }); 
       })(req, res, next); 
     });
@@ -121,7 +122,7 @@ class UserRoutes {
     this.app.get('/logout', async (req, res) => {
       await req.logOut();
       req.session.destroy();
-      res.redirect('/api/forum');
+      res.send('User is logged out!');
     });
   }
 

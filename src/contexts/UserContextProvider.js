@@ -1,13 +1,17 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 
 export const UserContext = createContext()
 
 const UserContextProvider = (props) => {
-  const [loggedIn, setLoggedIn] = useState(null)
+  const [user, setUser] = useState(null)
+
+  useEffect(()=>{
+    console.log(user);
+  },[user])
 
   const values = {
-    loggedIn,
-    setLoggedIn
+    user,
+    setUser
   }
 
   return (

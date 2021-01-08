@@ -3,7 +3,7 @@ import { UserContext } from '../contexts/UserContextProvider'
 import { Container, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 
 const Register = (props) => {
-  const { setLoggedIn } = useContext(UserContext)
+  const { setUser} = useContext(UserContext)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
@@ -23,7 +23,7 @@ const Register = (props) => {
     })
     .then(res => {
       if (res.status === 200) {
-        setLoggedIn(res)
+        setUser(res)
         props.history.push('/')
       } else {
         setMessage("This username is already taken!")

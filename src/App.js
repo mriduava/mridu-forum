@@ -8,6 +8,7 @@ import Register from './pages/Register'
 import Signin from './pages/Signin'
 import About from './pages/About'
 import MyPage from './pages/MyPage'
+import ProtectedRoutes from './routes/ProtectedRoutes'
 import ForumContextProvider from './contexts/ForumContextProvider'
 import UserContextProvider from './contexts/UserContextProvider'
 
@@ -18,18 +19,20 @@ const App = () => {
       <ForumContextProvider>
         <Router>         
           <Navbar/>
+           {/* <ProtectedRoutes/> */}
             <div className="content">
-              <Switch>
+              <Switch>               
                 <Route exact path="/" component={Home} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/signin" component={Signin} />
                 <Route exact path="/about" component={About} />
                 <Route exact path="/mypage" component={MyPage} />
                 <Route exact path="/:id" component={ThreadList} />
-                <Route exact path="/:id1/:id2" component={Thread} />
+                <Route exact path="/:id1/:id2" component={Thread} />                
               </Switch>
             </div>
-          <Footer/>              
+          <Footer/>  
+                     
         </Router>
       </ForumContextProvider>
       </UserContextProvider>

@@ -3,7 +3,7 @@ import { UserContext } from '../contexts/UserContextProvider'
 import { Container, Row, Col, Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 
 const Signin = (props) => {
-  const { setLoggedIn } = useContext(UserContext)
+  const { setUser} = useContext(UserContext)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
@@ -11,8 +11,7 @@ const Signin = (props) => {
   const loginUser = async (e) => {
     e.preventDefault();
     const credentials = {
-      username: username,
-      password: password
+      username, password
     }
     await fetch('/login', {
       method: 'POST',
@@ -21,14 +20,19 @@ const Signin = (props) => {
         'Content-Type': 'application/json'
       }
     })
-    .then(res => {
-      if (res.status === 200) {
-        setLoggedIn(res)
-        props.history.push('/')
+    .then((response) => {
+      if (response.ok) {
+        response = response.json();
+        Promise.resolve(response)
+        .then(user => setUser(user))          
+        props.history.push('/') 
       } else {
         setMessage("Username or Password incorrect!")
       }
     })
+    .catch((error) => {
+      return Promise.reject()
+    });
   }
 
   return (
