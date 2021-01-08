@@ -24,7 +24,7 @@ const Register = (props) => {
     .then(res => {
       if (res.status === 200) {
         setUser(res)
-        props.history.push('/')
+        props.history.push('/mypage')
       } else {
         setMessage("This username is already taken!")
       }

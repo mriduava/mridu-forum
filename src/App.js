@@ -1,3 +1,4 @@
+import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from './pages/Home'
 import ThreadList from './components/ThreadList'
@@ -18,21 +19,20 @@ const App = () => {
       <UserContextProvider>
       <ForumContextProvider>
         <Router>         
-          <Navbar/>
-           {/* <ProtectedRoutes/> */}
+          <Navbar/>       
             <div className="content">
-              <Switch>               
-                <Route exact path="/" component={Home} />
+              <Switch>                 
+                <Route exact path="/" component={Home} />                  
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/signin" component={Signin} />
-                <Route exact path="/about" component={About} />
                 <Route exact path="/mypage" component={MyPage} />
+                <Route exact path="/about" component={About} /> 
                 <Route exact path="/:id" component={ThreadList} />
-                <Route exact path="/:id1/:id2" component={Thread} />                
+                <Route exact path="/:id1/:id2" component={Thread} /> 
+                {/* <ProtectedRoutes/>                        */}
               </Switch>
             </div>
-          <Footer/>  
-                     
+          <Footer/>                    
         </Router>
       </ForumContextProvider>
       </UserContextProvider>

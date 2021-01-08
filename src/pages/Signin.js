@@ -25,7 +25,7 @@ const Signin = (props) => {
         response = response.json();
         Promise.resolve(response)
         .then(user => setUser(user))          
-        props.history.push('/') 
+        props.history.push('/mypage') 
       } else {
         setMessage("Username or Password incorrect!")
       }
