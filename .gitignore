@@ -10,6 +10,7 @@
 
 # production
 /build
+debug.log
 
 # Optional eslint cache
 .eslintcache
