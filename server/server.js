@@ -13,6 +13,18 @@ new ForumRoutes(app);
 new ThreadRoutes(app);
 new UserRoutes(app);
 
+app.use(function(req,res,next){
+  var _send = res.send;
+  var sent = false;
+  res.send = function(data){
+    if(sent) return;
+    _send.bind(res)(data);
+    sent = true;
+};
+  next();
+});
+
+
 // INVALID URL
 app.get('*', async (req, res) => {
   await res.status(404).send('Page not found!');

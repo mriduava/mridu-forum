@@ -1,7 +1,7 @@
 const Forum = require('../models/forum');
 const Thread = require('../models/thread');
 const Post = require('../models/post');
-const { isUserLoggedIn, getPermissionToChange } = require('../acl/permission');
+const { isUserLoggedIn } = require('../acl/permission');
 
 class ThreadRoutes{
 
@@ -58,9 +58,10 @@ class ThreadRoutes{
     })
   }
 
+
   // EDIT A THREAD
   editForumThread(){
-    this.app.put('/api/forums/:_id/threads/:_id', getPermissionToChange(), async (req, res) => {
+    this.app.put('/api/forums/:_id/threads/:_id', async (req, res) => {
       try {
         let forumArticle = await Thread.findById(req.params._id);
         if (forumArticle) {
@@ -80,24 +81,41 @@ class ThreadRoutes{
     });
   }
 
-  // DELETE A THREAD
+    // DELETE A THREAD
   deleteForumThread(){
-    this.app.delete('/api/forums/:_id/threads/:_id', getPermissionToChange(), async (req, res) => {
+    this.app.delete('/api/forums/:_id1/:_id2', isUserLoggedIn, (req, res) => {
       try {
-        let forumArticle = await Thread.findById(req.params._id);
-        if (forumArticle) {
-          await Thread.findByIdAndDelete(req.params._id, (err) => {
-            if(err){
-              res.redirect("/api/forums/" + req.params._id);
-            }else{
-              res.redirect("/api/forums");
-            }
-          });
-        }else{
-          return res.status(404).send('This article is no longer exist!');
+        let forum = Forum.findById(req.params._id1);
+        if (!forum) {
+          return res.status(404).send('This forum is no longer exist!');          
+        }else{                   
+          Thread.findById(req.params._id2, (err, thread)=>{  
+            try {
+              if (thread.author.id.equals(req.user._id) 
+                  || (req.user.role === 'admin')||(req.user.role==='moderator')) {
+                Thread.findByIdAndDelete(req.params._id2, err=>{
+                  if (err) {
+                    res.send(err)
+                  }else{
+                     Forum.findByIdAndUpdate(req.params._id1, {$pull: {threads: req.params._id2}}, err=>{
+                       if (err) {
+                         res.send(err)
+                       }else{
+                          res.send("The thread deleted successfully!")
+                       }
+                     })                    
+                  }
+                })                               
+              }else{
+                res.send('You are not allowed to make a change!')
+              }
+            } catch (error) {
+              res.send("Thread not found!")
+            }             
+          });        
         }
       } catch (e) {
-        return res.status(404).send('This article is no longer exist!');
+        return res.status(404).send('This forum is no longer exist!');
       }
     });
   }

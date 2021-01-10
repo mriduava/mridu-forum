@@ -1,3 +1,4 @@
+const Forum = require('../models/forum')
 const Thread = require('../models/thread');
 const User = require('../models/user');
 
