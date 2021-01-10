@@ -4,15 +4,96 @@ import { UserContext } from '../contexts/UserContextProvider'
 import { Container, Row, Col, Form, FormGroup, Input } from 'reactstrap';
 import moment from 'moment'
 
-const Thread = () => {
-  const { thread, subjectId, threadId } = useContext(ForumContext)
+const Thread = (props) => {
+  const { thread, subjectId, threadId, fetchThreadById } = useContext(ForumContext)
   const { user } = useContext(UserContext)
   const [comment, setComment] = useState('')
   const [message, setMessage] = useState('')
   const [showForm, setShowForm] = useState(false)
+  const [showEditForm, setShowEditForm] = useState(false)
+  const [editText, setEditText] = useState('')
 
   const timeFormat = (time) => {
     return moment(time).format("YYYY-MM-DD, H:mm");
+  }
+
+  const toggleButton = () => {
+    (!showForm)?
+      setShowForm(true):
+      setShowForm(false)
+  }
+
+  const toggleEditButton = () => {
+    (!showEditForm)?
+      setShowEditForm(true):
+      setShowEditForm(false)
+  }
+
+  const editThread = async () => {
+      await fetch(`/api/forums/${subjectId}/${threadId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        topic:thread.topic,
+        text:editText}),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      if (res.status === 200) {
+        fetchThreadById(subjectId, threadId);
+        setMessage('Text modification successful!')
+      } else {
+        setMessage("Text modification failed!")
+      }
+    })
+  }
+
+
+  const renderEditForm = ()=>{
+    return(
+      <>
+        <Row>  
+          <Col xs="3" sm="3">
+            <h5 className="text-secondary">{user.username.toUpperCase()}</h5>
+            <p className="mb-0 text-warning">is going to modify</p>
+          </Col>       
+          <Col xs="9" sm="9">
+            <Form onSubmit={editThread}>
+              <FormGroup>
+                <textarea name="text" id="text" placeholder="Write your comment here..." 
+                  className="form-control" pattern=".{20, 5000}" required minLength="20" 
+                  defaultValue={thread.text} onChange={e=>setEditText(e.target.value)}></textarea>
+              </FormGroup>
+              <button className="btn btn-outline-success mt-0" 
+                style={{height: "26px", width: "162px", fontSize: "13px", paddingTop: "2px"}}>Submit Comment
+              </button>
+            </Form>
+            <button className="btn btn-outline-danger mt-0" onClick={()=>toggleEditButton()}
+              style={{position: "relative", left: 170, top: -25, height: "26px", 
+              width: "120px", fontSize: "13px", paddingTop: "2px"}}>Cancel
+            </button>          
+          </Col>
+        </Row>
+        <hr/>
+      </>
+    )
+  }
+
+  const deleteThread = async () => {
+    await fetch(`/api/forums/${subjectId}/${threadId}`, {
+      method: 'DELETE'
+    })
+    .then((response) => {
+      if (response.ok) {
+        props.history.push('/')     
+      } else {
+        setMessage(response)
+      }
+    })
+    .catch((error) => {
+      return Promise.reject()
+    });
   }
 
   const writeComment = async (e) => {
@@ -40,12 +121,6 @@ const Thread = () => {
     .catch((error) => {
       return Promise.reject()
     });
-  }
-
-  const toggleButton = () => {
-    (!showForm)?
-      setShowForm(true):
-      setShowForm(false)
   }
 
   const renderForm = ()=>{
@@ -109,10 +184,10 @@ const Thread = () => {
                 if (user !==null && (user.id === thread.author.id || user.role === 'admin' || user.role === 'moderator')) {
                   return (
                     <>
-                    <button className="btn btn-outline-primary mt-3 mr-2" 
+                    <button className="btn btn-outline-primary mt-3 mr-2" onClick={()=>toggleEditButton()}
                         style={{height: "26px", width: "90px", fontSize: "13px", paddingTop: "2px"}}>Edit
                     </button>
-                    <button className="btn btn-outline-danger mt-3" 
+                    <button className="btn btn-outline-danger mt-3" onClick={()=>deleteThread()}
                         style={{height: "26px", width: "90px", fontSize: "13px", paddingTop: "2px"}}>Delete
                     </button> 
                     </>
@@ -122,7 +197,8 @@ const Thread = () => {
             </Col>  
           </Row>
            <hr/>
-           {showForm&&renderForm()}         
+           {showForm&&renderForm()}       
+           {showEditForm&&renderEditForm()}       
         </div>     
       )
   }

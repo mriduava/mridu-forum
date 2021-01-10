@@ -61,27 +61,38 @@ class ThreadRoutes{
 
   // EDIT A THREAD
   editForumThread(){
-    this.app.put('/api/forums/:_id/threads/:_id', async (req, res) => {
+    this.app.put('/api/forums/:_id1/:_id2', isUserLoggedIn, (req, res) => {
       try {
-        let forumArticle = await Thread.findById(req.params._id);
-        if (forumArticle) {
-          await Thread.findByIdAndUpdate(req.params._id, req.body, (err) =>{
-            if(err){
-              res.redirect("/api/forum");
-            }else{
-              res.redirect("/api/forum/" + req.params._id);
-            }
-          });
-        }else{
-          return res.status(404).send('This thread is no longer exist!');
+        let forum = Forum.findById(req.params._id1);
+        if (!forum) {
+          return res.status(404).send('This forum is no longer exist!');          
+        }else{                   
+          Thread.findById(req.params._id2, (err, thread)=>{  
+            try {
+              if (thread.author.id.equals(req.user._id) 
+                  || (req.user.role === 'admin')||(req.user.role==='moderator')) {
+                 Thread.findByIdAndUpdate(req.params._id2, req.body, err=>{
+                  if (err) {
+                    res.send(err)
+                  }else{
+                    res.send("The thread updated successfully!")
+                  }
+                })                               
+              }else{
+                res.send('You are not allowed to make a change!')
+              }
+            } catch (error) {
+              res.send("Thread not found!")
+            }             
+          });        
         }
       } catch (e) {
-        return res.status(404).send('This thread is no longer exist!');
+        return res.status(404).send('This forum is no longer exist!');
       }
     });
   }
 
-    // DELETE A THREAD
+  // DELETE A THREAD
   deleteForumThread(){
     this.app.delete('/api/forums/:_id1/:_id2', isUserLoggedIn, (req, res) => {
       try {
