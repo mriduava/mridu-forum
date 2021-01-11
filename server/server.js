@@ -13,10 +13,10 @@ new ForumRoutes(app);
 new ThreadRoutes(app);
 new UserRoutes(app);
 
-app.use(function(req,res,next){
+app.use((req,res,next)=>{
   var _send = res.send;
   var sent = false;
-  res.send = function(data){
+  res.send = (data) =>{
     if(sent) return;
     _send.bind(res)(data);
     sent = true;
