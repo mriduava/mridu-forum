@@ -4,10 +4,13 @@ export const UserContext = createContext()
 
 const UserContextProvider = (props) => {
   const [user, setUser] = useState(null)
+  const token = JSON.parse(localStorage.getItem('token'))
 
   useEffect(()=>{
-    console.log(user);
-  },[user])
+    if (token) {
+      setUser(token)
+    }
+  },[])
 
   const values = {
     user,

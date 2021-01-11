@@ -11,6 +11,7 @@ const ForumNavbar= (props) => {
   const logoutUser = async () => {
     await fetch('/logout')
     setUser(null)
+    localStorage.removeItem('token');
   }
 
   return (

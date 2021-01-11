@@ -24,7 +24,10 @@ const Signin = (props) => {
       if (response.ok) {
         response = response.json();
         Promise.resolve(response)
-        .then(user => setUser(user))          
+        .then(user => {
+          setUser(user)
+          localStorage.setItem('token', JSON.stringify(user)) 
+        })             
         props.history.push('/mypage') 
       } else {
         setMessage("Username or Password incorrect!")

@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react'
 import { ForumContext } from '../contexts/ForumContextProvider'
 import { UserContext } from '../contexts/UserContextProvider'
-import { Container, Row, Col, Form, FormGroup, Input } from 'reactstrap';
+import { Container, Row, Col, Form, FormGroup, Fade } from 'reactstrap';
 import moment from 'moment'
 
 const Thread = (props) => {
@@ -17,20 +17,12 @@ const Thread = (props) => {
     return moment(time).format("YYYY-MM-DD, H:mm");
   }
 
-  const toggleButton = () => {
-    (!showForm)?
-      setShowForm(true):
-      setShowForm(false)
-  }
+  const toggleButton = () =>  setShowForm(!showForm)
+  const toggleEditButton = () => setShowEditForm(!showEditForm)
 
-  const toggleEditButton = () => {
-    (!showEditForm)?
-      setShowEditForm(true):
-      setShowEditForm(false)
-  }
-
-  const editThread = async () => {
-      await fetch(`/api/forums/${subjectId}/${threadId}`, {
+  const editThread = async (e) => {
+    e.preventDefault();
+    await fetch(`/api/forums/${subjectId}/${threadId}`, {
       method: 'PUT',
       body: JSON.stringify({
         topic:thread.topic,
@@ -41,7 +33,9 @@ const Thread = (props) => {
     })
     .then(res => {
       if (res.status === 200) {
-        fetchThreadById(subjectId, threadId);
+        fetchThreadById(subjectId, threadId)
+        setEditText('')
+        toggleEditButton()
         setMessage('Text modification successful!')
       } else {
         setMessage("Text modification failed!")
@@ -66,7 +60,7 @@ const Thread = (props) => {
                   defaultValue={thread.text} onChange={e=>setEditText(e.target.value)}></textarea>
               </FormGroup>
               <button className="btn btn-outline-success mt-0" 
-                style={{height: "26px", width: "162px", fontSize: "13px", paddingTop: "2px"}}>Submit Comment
+                style={{height: "26px", width: "162px", fontSize: "13px", paddingTop: "2px"}}>Submit Updated Text
               </button>
             </Form>
             <button className="btn btn-outline-danger mt-0" onClick={()=>toggleEditButton()}
@@ -106,14 +100,14 @@ const Thread = (props) => {
       }
     })
     .then((response) => {
+      setComment('');
+      toggleButton()
+      fetchThreadById(subjectId, threadId)
       response = response.json();
       if (response.ok) {
-        toggleButton()
         response = response.json();
         Promise.resolve(response)
         .then(message => setMessage(message));
-        setComment('');  
-        setShowForm(false)     
       } else {
         setMessage("You are not logged in!")
       }
@@ -135,7 +129,7 @@ const Thread = (props) => {
             <Form onSubmit={writeComment}>
               <FormGroup>
                 <textarea name="text" id="text" placeholder="Write your comment here..." 
-                  className="form-control" pattern=".{100, 5000}" required minlength="100" 
+                  className="form-control" pattern=".{100, 5000}" required minLength="100" 
                   value={comment} onChange={e=>setComment(e.target.value)}></textarea>
               </FormGroup>
               <button className="btn btn-outline-success mt-0" 
@@ -167,7 +161,7 @@ const Thread = (props) => {
             </Col>
             <Col xs="9" sm="9">
               <p className="mb-0">{timeFormat(thread.created)}</p>
-              <p className="text-dark mt-1 text-justify">{thread.text}</p>         
+              <p className="text-dark mt-1 text-justify" style={{whiteSpace: "pre-wrap"}}>{thread.text}</p>         
               {(() => {
                 if (user!==null) {
                   return (
@@ -197,8 +191,12 @@ const Thread = (props) => {
             </Col>  
           </Row>
            <hr/>
-           {showForm&&renderForm()}       
-           {showEditForm&&renderEditForm()}       
+          <Fade in={showForm} tag="h5" className="mt-3">
+            {showForm&&renderForm()}    
+          </Fade> 
+          <Fade in={showEditForm} tag="h5" className="mt-3">  
+            {showEditForm&&renderEditForm()}  
+          </Fade>      
         </div>     
       )
   }
