@@ -1,9 +1,15 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
+import { UserContext } from '../contexts/UserContextProvider'
 import { Container, Row, Col, Form, FormGroup, Input, FormFeedback } from 'reactstrap';
+import WritingForm from './WritingForm'
+import MyThreads from './MyThreads'
 
 const AdminPage = () => {
+  const { user } = useContext(UserContext)
+  const [showMyThreads, setShowMyThreads] = useState(true);
+  const toggleMyThreads = () => setShowMyThreads(!showMyThreads);
   const [search, setSearch] = useState('')
-  const [user, setUser] = useState(null)
+  const [foundUser, setFoundUser] = useState(null)
   const [selectedRole, setSelectedRole] = useState('');
   const [userName, setUserName] = useState(null);
   const [userRole, setUserRole] = useState(null);
@@ -13,12 +19,12 @@ const AdminPage = () => {
     e.preventDefault();    
     let user = await fetch(`/search/user?username=${search}&role=${search}`)
     user = await user.json();
-    setUser(user)
+    setFoundUser(user)
     setSearch('')
   }
 
   const dispUserInfo =() => {
-    return user.map((u, i) => {
+    return foundUser.map((u, i) => {
       return (
         <div key={'sub' + u._id + i}>
           <hr/>
@@ -37,7 +43,7 @@ const AdminPage = () => {
   const transferUserInfo =(username, role) => {
     setUserName(username);
     setUserRole(role);
-    setUser(null);
+    setFoundUser(null);
     setSelectedRole(role);
   }
 
@@ -68,7 +74,7 @@ const AdminPage = () => {
         <h5 className="pl-2 text-light pb-0">Modify User</h5>  
       </div>
       <Row className="pl-1">
-        <Col lg="3">
+        <Col xs="12" sm="12" lg="6">
           <h5>Username</h5>
           <div>
             <h2 className="text-info mt-2 p-0">{userName}</h2>
@@ -78,7 +84,7 @@ const AdminPage = () => {
               style={{height: "30px", width: "150px", fontSize: "16px", paddingTop: "2px"}}>Delete User
           </button>
         </Col>
-        <Col lg="9">
+        <Col xs="12" sm="12" lg="6" >
           <Form onSubmit={resetUserRole}>
             <h5 className="py-0">Set role</h5>
             <div className="form-check">
@@ -131,12 +137,12 @@ const AdminPage = () => {
     return () => clearTimeout(timer);
   }, [message]);
 
-  return (
-     <Container className="border border-warning pb-5" style={{minHeight:"80vh"}}>
-      <h4 className="text-dark font-weight-bold pt-5">ADMIN</h4>
-      <hr/>
+
+  const renderModifyUser = () =>{
+    return(
+      <>
       <Row className="d-flex flex-column">
-        <Col xs="12" sm="8" md="6" lg="5" className="pl-3 pt-0"> 
+        <Col xs="12" sm="12" md="12" lg="12" className="pl-3 pt-0"> 
           <Form onSubmit={searchUser} className="d-flex">
             <FormGroup>
               <Input type="username" name="username" id="username" placeholder="Search user"
@@ -144,7 +150,7 @@ const AdminPage = () => {
                 value={search} onChange={e=>setSearch(e.target.value)} required/>
               <FormFeedback valid>Username is not correct!</FormFeedback>
             </FormGroup>
-            <button className="btn btn-outline-secondary py-0" style={{height: "32px"}}>Search</button>
+            <button className="btn btn-outline-secondary py-0" style={{height: "32px", width:"120px"}}>Search</button>
           </Form>
         </Col>
         <div style={{fontSize: "14px"}}>
@@ -153,10 +159,65 @@ const AdminPage = () => {
         </div>
       </Row>
 
-      {user&&dispUserInfo()}
+      {foundUser&&dispUserInfo()}
       <hr/>
       {userName&&dispToModifyUser()}
       {message&&displayAlert()}
+      </>
+    )
+  }
+
+  return (
+    <Container className="border border-warning pb-5" style={{minHeight:"80vh"}}>
+
+      <Row className="d-flex flex-column">
+        <Col xs="12" sm="12" md="12" lg="12" className="pl-3 pt-0"> 
+          <h1 className="text-info font-weight-bold pt-5 ml-3">{user&&user.username.toUpperCase()}</h1>
+          <h6 className="text-secondary ml-3">ROLE: <span className="text-success">{user&&user.role.toUpperCase()}</span></h6>
+        </Col>
+      </Row>
+      <hr/>
+      <Row className="mx-auto">
+        <Col xs="12" sm="12" md="6" lg="6">
+          <Row className="d-flex">
+            <Col lg="12" className="d-flex justify-content-between">
+                <button className="btn btn-outline-info m-0">Create a thread</button>
+                <button className="btn btn-outline-info align-self-end ">Create a Sub-Forum</button>
+            </Col>
+          </Row>
+     
+          <hr className="ml-1"/>
+          <WritingForm/>
+        </Col>
+
+
+         <Col xs="12" sm="12" md="6" lg="6">
+            <Row className="d-flex">
+              <Col lg="12" className="d-flex justify-content-between">
+                <button className="btn btn-outline-info ml-lg-3" disabled={showMyThreads}
+                  onClick={toggleMyThreads}>My Threads
+                </button>
+                <button className="btn btn-outline-info mr-0" disabled={!showMyThreads} 
+                  onClick={toggleMyThreads}>Modify User</button>
+              </Col>
+            </Row>
+
+           <hr className="ml-lg-3"/>
+
+           <div className="ml-lg-3 mt-3">
+              {showMyThreads?(
+                <div>
+                  <MyThreads/>
+                </div>  
+              ):(
+                <div>
+                  {renderModifyUser()}
+                </div>
+              )}
+           </div>
+        </Col>
+      </Row>
+      
     </Container>
   )
 }
