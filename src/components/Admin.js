@@ -3,11 +3,14 @@ import { UserContext } from '../contexts/UserContextProvider'
 import { Container, Row, Col, Form, FormGroup, Input, FormFeedback } from 'reactstrap';
 import WritingForm from './WritingForm'
 import MyThreads from './MyThreads'
+import ForumForm from './ForumForm'
 
 const AdminPage = () => {
   const { user } = useContext(UserContext)
   const [showMyThreads, setShowMyThreads] = useState(true);
   const toggleMyThreads = () => setShowMyThreads(!showMyThreads);
+  const [showForm, setShowForm] = useState(true)
+  const toggleShowForm = () => setShowForm(!showForm)
   const [search, setSearch] = useState('')
   const [foundUser, setFoundUser] = useState(null)
   const [selectedRole, setSelectedRole] = useState('');
@@ -181,13 +184,21 @@ const AdminPage = () => {
         <Col xs="12" sm="12" md="6" lg="6">
           <Row className="d-flex">
             <Col lg="12" className="d-flex justify-content-between">
-                <button className="btn btn-outline-info m-0">Create a thread</button>
-                <button className="btn btn-outline-info align-self-end ">Create a Sub-Forum</button>
+                <button className="btn btn-outline-primary m-0" disabled={showForm}
+                  onClick={toggleShowForm}>Create a Thread
+                </button>
+                <button className="btn btn-outline-primary align-self-end " disabled={!showForm}
+                  onClick={toggleShowForm}>Create a Sub-Forum
+                </button>
             </Col>
           </Row>
      
           <hr className="ml-1"/>
-          <WritingForm/>
+           {showForm?(
+            <WritingForm/>
+           ):(
+            <ForumForm/>
+           )}
         </Col>
 
 
@@ -216,7 +227,9 @@ const AdminPage = () => {
               )}
            </div>
         </Col>
+        
       </Row>
+    
       
     </Container>
   )

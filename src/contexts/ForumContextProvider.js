@@ -38,6 +38,7 @@ const ForumContextProvider = (props) => {
   }, [])
 
   const values = {
+    fetchFroums,
     subjects,
     fetchFroumById,
     threads,

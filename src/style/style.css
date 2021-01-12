@@ -40,8 +40,13 @@ html {
 .my-threads li{
   list-style: none;
 }
-.my-threads li:nth-child(2) {
-  background: red;
+
+.my-threads li:hover{
+  color: rgb(150, 150, 150);
+  cursor: pointer;
+}
+.my-threads li:nth-of-type(2) {
+  background-color: rgb(255, 157, 189)t;
 }
 
 .found_user:hover{

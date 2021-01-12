@@ -20,8 +20,8 @@ const MyThreads= () => {
       return (
         <ul key={'sub' + thread._id + i}>
           <li>
-            <span className="text-secondary">{i+1}. </span> 
-            <span className="text-info"> {thread.topic}</span>
+            {i+1}.
+            <span> {thread.topic}</span>
           </li>    
         </ul>    
       )

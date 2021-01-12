@@ -83,10 +83,11 @@ const WritingForm = () => {
           value={text} onChange={e=>setText(e.target.value)} required/>
       </FormGroup>
       <button className="btn btn-outline-success mt-0" 
-        style={{height: "26px", width: "120px", fontSize: "13px", paddingTop: "2px"}}>Submit
+        style={{height: "26px", width: "190px", fontSize: "13px", paddingTop: "2px"}}>Submit Thread
       </button>
     </Form>
       {message&&displayAlert()}
+      <hr/>
     </>
   )
 }
