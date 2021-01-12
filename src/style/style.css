@@ -37,6 +37,13 @@ html {
   text-align: center;
 }
 
+.my-threads li{
+  list-style: none;
+}
+.my-threads li:nth-child(2) {
+  background: red;
+}
+
 .found_user:hover{
   background-color: #ffeec8;
 }

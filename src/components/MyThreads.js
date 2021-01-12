@@ -1,26 +1,29 @@
-import React, {useContext} from 'react'
-import { ForumContext } from '../contexts/ForumContextProvider'
+import React, {useContext, useState, useEffect} from 'react'
 import { UserContext } from '../contexts/UserContextProvider'
 import { Row, Col } from 'reactstrap';
 
 const MyThreads= () => {
   const { user } = useContext(UserContext)
-  const { threads } = useContext(ForumContext)
+  const [myThreads, setMyThreads] = useState([])
+
+  useEffect(()=>{
+    const fetchMyThreads = async () => {
+      let allMyThreads = await fetch(`/search/mythreads?username=${user.username}`)
+      allMyThreads = await allMyThreads.json();
+      setMyThreads(allMyThreads)
+    }
+    fetchMyThreads()
+  }, [user.username])
 
   const mapThreads = () => {
-    return threads.map((thread, i) => {
+    return myThreads.map((thread, i) => {
       return (
-        <div key={'sub' + thread._id + i}>
-           {(() => {
-                if (user!==null && user.id === thread.author.id) {
-                  return (
-                    <>
-                      <p>{i}. {thread.topic}</p>
-                    </>
-                  )
-                }
-              })()}
-        </div>    
+        <ul key={'sub' + thread._id + i}>
+          <li>
+            <span className="text-secondary">{i+1}. </span> 
+            <span className="text-info"> {thread.topic}</span>
+          </li>    
+        </ul>    
       )
     })
   }
@@ -28,7 +31,9 @@ const MyThreads= () => {
   return ( 
     <Row>
       <Col lg="12">
-      {threads&&mapThreads()}
+        <div className="my-threads">
+          {myThreads&&mapThreads()}
+        </div>
       </Col>
     </Row>
   )

@@ -12,6 +12,21 @@ class ThreadRoutes{
     this.postThreadPost();
     this.editForumThread();
     this.deleteForumThread();
+    this.getMyThreads();
+  }
+
+  // GET MY THREADS
+  getMyThreads(){
+    this.app.get("/search/mythreads", (req, res) => {
+      let query = { "author.username": req.query.username }
+      Thread.find(query, (err, mythreads) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(mythreads);
+        }
+      });
+    });
   }
 
   // GET FORUM THREAD BY ID

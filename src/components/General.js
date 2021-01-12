@@ -11,8 +11,8 @@ const General = () => {
     <Container className="border border-warning pb-5" style={{minHeight:"80vh"}}>
       <Row className="d-flex flex-column">
         <Col xs="12" sm="12" md="12" lg="12" className="pl-3 pt-0"> 
-          <h2 className="text-info font-weight-bold pt-5 ml-3">{user&&user.username.toUpperCase()}</h2>
-          <h5 className="text-primary ml-3">GENERAL</h5>
+          <h1 className="text-info font-weight-bold pt-5 ml-3">{user&&user.username.toUpperCase()}</h1>
+          <h6 className="text-secondary ml-3">ROLE: <span className="text-success">{user&&user.role.toUpperCase()}</span></h6>
         </Col>
       </Row>
       <hr/>
