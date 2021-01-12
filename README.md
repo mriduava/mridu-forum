@@ -15,7 +15,13 @@
 * Moderator has the same access as general user. Moreover moderator has the power to modify or delete any user's Thread.
 * Admin can create Sub-Forum, have all the access as like as general-user or moderator.
 
-![](/screenshot/screen.png)
+### FORUM OUTLOOK
+![](/screenshot/mridu_forum.png)
+
+![](/screenshot/mridu_forum_2.png)
+
+### ADMIN PANEL
+![](/screenshot/mridu_forum_3.png)
 
 ## HOW TO RUN LOCALLY
 * Clone files from GitHub. <br>

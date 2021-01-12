@@ -17,7 +17,7 @@ class ThreadRoutes{
 
   // GET MY THREADS
   getMyThreads(){
-    this.app.get("/search/mythreads", (req, res) => {
+    this.app.get("/search/mythreads", isUserLoggedIn, (req, res) => {
       let query = { "author.username": req.query.username }
       Thread.find(query, (err, mythreads) => {
         if (err) {

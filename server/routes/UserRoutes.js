@@ -128,7 +128,7 @@ class UserRoutes {
 
   //SEARCH USER
   searchUser(){
-    this.app.get("/search/user", async (req, res) => {
+    this.app.get("/search/user", isUserLoggedIn, async (req, res) => {
       let query = {
         $or: [{ username: req.query.username },
           { role: req.query.role}]
@@ -145,7 +145,7 @@ class UserRoutes {
 
   // SET USER ROLE
   setUserRole(){
-    this.app.put('/api/users', async (req, res) => {
+    this.app.put('/api/users', isUserLoggedIn, async (req, res) => {
       await User.updateOne(
         { username: req.query.username },
         { $set: { role: req.body.role } }, (err, result) => {

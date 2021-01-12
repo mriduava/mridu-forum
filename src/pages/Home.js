@@ -15,11 +15,11 @@ const Home = () => {
             <Col xs="12" sm="8">
               <Link to={`/${subject.subject}`} style={{ textDecoration: 'none' }}
                 onClick={()=>fetchFroumById(subject._id, subject.subject)}>
-                <h2 className="text-secondary mt-1">{subject.subject}</h2>
-                <p className="text-dark text-justify">{subject.description}</p>
+                <h2 className="text-secondary mt-1 px-2">{subject.subject}</h2>
+                <p className="text-dark text-justify px-2">{subject.description}</p>
               </Link>       
             </Col>
-            <Col sm="4" className="mt-5 text-right d-none d-lg-block">
+            <Col sm="4" className="mt-5 text-right d-none d-lg-block pr-4">
               <h5>{subject.threads.length}</h5>
             </Col>
           </Row>
