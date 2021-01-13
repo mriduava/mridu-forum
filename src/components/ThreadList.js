@@ -14,23 +14,23 @@ const ThreadList = () => {
           <Col xs="9" sm="8">
             <Link to={`/${subjectName}/${thread.topic}`} style={{ textDecoration: 'none' }}
               onClick={()=>fetchThreadById(subjectId, thread._id)}>
-              <h4 className="text-secondary mt-1 pb-0">{thread.topic}</h4>
+              <h5 className="text-secondary mt-1 pb-0">{thread.topic}</h5>
               <p className="text-primary mt-0 pt-0">Writer: {thread.author.username.toUpperCase()}</p>
             </Link>       
           </Col>
           <Col xs="3" sm="4" className="text-right mt-2 d-none d-lg-block">{thread.posts.length}</Col>
         </Row>
-        <hr/>
+        <hr className="mt-1"/>
         </div>    
       )
     })
   }
 
   return (
-    <Container className="themed-container" fluid="xl">
+    <Container className="themed-container">
       <Row className="text-light bg-info pt-2 mb-3">
-        <Col xs="9" sm="8"><h4>Threads</h4></Col>
-        <Col xs="3" sm="4" className="text-lg-right d-none d-lg-block"><h4>Answers</h4></Col>
+        <Col xs="9" sm="8"><h5>Threads</h5></Col>
+        <Col xs="3" sm="4" className="text-lg-right d-none d-lg-block"><h5>Answers</h5></Col>
       </Row>
       {threads && mapThreads()}
     </Container>

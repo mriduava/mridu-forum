@@ -18,7 +18,7 @@ class UserRoutes {
 
   // GET ALL USERS
   getAllUsers(){
-    this.app.get('/api/users', isUserLoggedIn, async (req, res) => {
+    this.app.get('/api/users', isUserLoggedIn, getPermissionToChangeUser(), async (req, res) => {
       await User.find({}, 'username' & 'role', (err, users)=>{
           res.json(users);
       })
@@ -41,7 +41,7 @@ class UserRoutes {
 
   // RESET USER PASSWORD
   resetPassword(){
-    this.app.put('/api/users/:_id', getPermissionToChangeUser(), async (req, res) => {
+    this.app.put('/api/users/:_id', isUserLoggedIn, getPermissionToChangeUser(), async (req, res) => {
       try {
         let user = await User.findById(req.params._id);
         await user.setPassword(req.body.password);
@@ -55,7 +55,7 @@ class UserRoutes {
 
   // DELETE A USER
   deleteUser(){
-    this.app.delete('/api/users/:_id', getPermissionToChangeUser(), async (req, res) => {
+    this.app.delete('/api/users/:_id', isUserLoggedIn, getPermissionToChangeUser(), async (req, res) => {
       try {
         let existUser = await User.findById(req.params._id);
         if (existUser) {
@@ -145,7 +145,7 @@ class UserRoutes {
 
   // SET USER ROLE
   setUserRole(){
-    this.app.put('/api/users', isUserLoggedIn, async (req, res) => {
+    this.app.put('/api/users', isUserLoggedIn, getPermissionToChangeUser(), async (req, res) => {
       await User.updateOne(
         { username: req.query.username },
         { $set: { role: req.body.role } }, (err, result) => {

@@ -19,7 +19,7 @@ const Home = () => {
                 <p className="text-dark text-justify px-2">{subject.description}</p>
               </Link>       
             </Col>
-            <Col sm="4" className="mt-5 text-right d-none d-lg-block pr-4">
+            <Col sm="4" className="mt-5 text-right d-none d-sm-block d-md-block d-lg-block pr-4">
               <h5>{subject.threads.length}</h5>
             </Col>
           </Row>
@@ -30,12 +30,17 @@ const Home = () => {
   }
 
   return (
-    <Container className="themed-container p-0" fluid="lg">
-      <Jumbotron/>
+    <Container className="container mx-auto px-0" >
+      <Row>
+        <Col lg="12" style={{margin: 0}}>
+        <Jumbotron/>
+        </Col>
+      </Row>
+      
       <Row className="text-white bg-secondary border border-rounded pt-2 mb-3"
         style={{margin: "0 0.5px 0 0.5px", borderRadius: "5px"}}>
         <Col xs="12" sm="8"><h4>Forums</h4></Col>
-        <Col sm="4" className="text-right d-none d-lg-block"><h4>Threads</h4></Col>
+        <Col sm="4" className="text-right d-none d-md-block d-sm-block d-lg-block"><h4>Threads</h4></Col>
       </Row>
       {subjects&&mapSubjects()}
     </Container>
