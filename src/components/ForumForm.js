@@ -4,14 +4,14 @@ import { Form, FormGroup, Input } from 'reactstrap';
 
 const ForumForm = () => {
   const { fetchFroums} = useContext(ForumContext)
-  const [forumSubject, setForumSubject] = useState()
-  const [forumDescription, setForumDescription] = useState()
+  const [forumSubject, setForumSubject] = useState('')
+  const [forumDescription, setForumDescription] = useState('')
   const [message, setMessage] = useState()
 
 
    const displayAlert = () => {
     return(
-      <div className="alert alert-warning alert-dismissible fade show" role="alert">{message}</div>
+      <div className="alert alert-success alert-dismissible fade show" role="alert">{message}</div>
     )
   }
 

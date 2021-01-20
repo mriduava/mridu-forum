@@ -14,6 +14,7 @@ const AdminPage = () => {
   const [search, setSearch] = useState('')
   const [foundUser, setFoundUser] = useState(null)
   const [selectedRole, setSelectedRole] = useState('');
+  const [userId, setUserId] = useState(null);
   const [userName, setUserName] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const [message, setMessage] = useState(null);
@@ -26,13 +27,28 @@ const AdminPage = () => {
     setSearch('')
   }
 
+  const deleteUser = async (id) => {
+    await fetch(`/api/users/${id}`, {
+      method: 'DELETE'
+    })
+    .then((response) => {
+      if (response.ok) {
+        setUserName(null)
+        setMessage('The user has been deleted!')   
+      } 
+    })
+    .catch((error) => {
+      return Promise.reject()
+    });
+  }
+
   const dispUserInfo =() => {
     return foundUser.map((u, i) => {
       return (
         <div key={'sub' + u._id + i}>
           <hr/>
           <Row className="pt-2 found_user" style={{cursor: "pointer"}}
-            onClick={()=>transferUserInfo(u.username, u.role)}>
+            onClick={()=>transferUserInfo(u._id, u.username, u.role)}>
             <Col xs="9" sm="8">  
               <h4 className="text-secondary mt-1 pb-0">{u.username}</h4>
               <p className="text-primary mt-0 pt-0">role: {u.role}</p>
@@ -43,7 +59,8 @@ const AdminPage = () => {
     })
   }
 
-  const transferUserInfo =(username, role) => {
+  const transferUserInfo =(id, username, role) => {
+    setUserId(id)
     setUserName(username);
     setUserRole(role);
     setFoundUser(null);
@@ -83,7 +100,7 @@ const AdminPage = () => {
             <h2 className="text-info mt-2 p-0">{userName}</h2>
             <p className="text-success mt-0 pt-0">Present Role: {userRole}</p>
           </div>
-          <button className="btn btn-outline-danger mt-3" 
+          <button className="btn btn-outline-danger mt-3" onClick={()=>deleteUser(userId)}
               style={{height: "30px", width: "150px", fontSize: "16px", paddingTop: "2px"}}>Delete User
           </button>
         </Col>
@@ -127,7 +144,7 @@ const AdminPage = () => {
 
   const displayAlert = () => {
     return(
-      <div className="alert alert-warning alert-dismissible fade show" role="alert">{message}</div>
+      <div className="alert alert-success alert-dismissible fade show" role="alert">{message}</div>
     )
   }
 

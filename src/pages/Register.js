@@ -45,12 +45,12 @@ const Register = (props) => {
           <Form onSubmit={registerUser}>
             <FormGroup>
               <Label for="username">Username</Label>
-              <Input type="username" name="username" id="username" 
+              <Input type="username" name="username" id="username" minlength="3"
                 value={username} onChange={e=>setUsername(e.target.value)} required/>
             </FormGroup>
             <FormGroup>
               <Label for="password">Password</Label>
-              <Input type="password" name="password" id="password" 
+              <Input type="password" name="password" id="password" minlength="6"
                 value={password} onChange={e=>setPassword(e.target.value)} required/>
             </FormGroup>
             <button className="btn btn-block btn-outline-success mt-4">SUBMIT</button>

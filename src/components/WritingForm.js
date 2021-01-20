@@ -30,7 +30,7 @@ const WritingForm = () => {
 
   const displayAlert = () => {
     return(
-      <div className="alert alert-warning alert-dismissible fade show" role="alert">{message}</div>
+      <div className="alert alert-success alert-dismissible fade show" role="alert">{message}</div>
     )
   }
 
@@ -76,11 +76,11 @@ const WritingForm = () => {
       </FormGroup>
       <FormGroup>
         <Input type="text" name="topic" id="topic" placeholder="Write a title..." 
-          value={topic} onChange={e=>setTopic(e.target.value)} required/>
+          minlength="6" value={topic} onChange={e=>setTopic(e.target.value)} required/>
       </FormGroup>     
       <FormGroup>
         <Input type="textarea" name="text" id="text" placeholder="Write in detail..." 
-          value={text} onChange={e=>setText(e.target.value)} required/>
+          minlength="15" value={text} onChange={e=>setText(e.target.value)} required/>
       </FormGroup>
       <button className="btn btn-outline-success mt-0" 
         style={{height: "26px", width: "190px", fontSize: "13px", paddingTop: "2px"}}>Submit Thread

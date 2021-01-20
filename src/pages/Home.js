@@ -11,7 +11,7 @@ const Home = () => {
     return subjects.map((subject, i) => {
       return (
         <div key={'sub' + subject._id + i}>
-          <Row>
+          <Row className="mx-0">
             <Col xs="12" sm="8">
               <Link to={`/${subject.subject}`} style={{ textDecoration: 'none' }}
                 onClick={()=>fetchFroumById(subject._id, subject.subject)}>
@@ -31,15 +31,15 @@ const Home = () => {
 
   return (
     <Container className="container mx-auto px-0" >
-      <Row>
-        <Col lg="12" style={{margin: 0}}>
+      <Row className="mx-0 px-0">
+        <Col lg="12" className="px-0">
         <Jumbotron/>
         </Col>
       </Row>
       
       <Row className="text-white bg-secondary border border-rounded pt-2 mb-3"
         style={{margin: "0 0.5px 0 0.5px", borderRadius: "5px"}}>
-        <Col xs="12" sm="8"><h4>Forums</h4></Col>
+        <Col xs="12" sm="8"><h4 className="pl-2">Forums</h4></Col>
         <Col sm="4" className="text-right d-none d-md-block d-sm-block d-lg-block"><h4>Threads</h4></Col>
       </Row>
       {subjects&&mapSubjects()}
