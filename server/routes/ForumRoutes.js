@@ -1,4 +1,5 @@
 const Forum = require('../models/forum');
+const { isUserLoggedIn, getPermissionToChangeUser } = require('../acl/permission');
 
 class ForumRoutes{
 
@@ -41,7 +42,7 @@ class ForumRoutes{
 
   // POST A NEW FORUM THREAD
   postNewForumSubject(){
-    this.app.post('/api/forums', async (req, res) => {
+    this.app.post('/api/forums', isUserLoggedIn, getPermissionToChangeUser(), async (req, res) => {
       await Forum.create(req.body, (err, text)=>{
         if (err) {
           res.json(err.message);
@@ -55,7 +56,7 @@ class ForumRoutes{
 
   // EDIT A FORUM SUBJECT
   editForumSubject(){
-    this.app.put('/api/forums/:_id', async (req, res) => {
+    this.app.put('/api/forums/:_id', isUserLoggedIn, getPermissionToChangeUser(), async (req, res) => {
       try {
         let forumSubject = await Forum.findById(req.params._id);
         if (forumSubject) {
@@ -77,7 +78,7 @@ class ForumRoutes{
 
   // DELETE A FORUM SUBJECT
   deleteForumSubject(){
-    this.app.delete('/api/forums/:_id', async (req, res) => {
+    this.app.delete('/api/forums/:_id', isUserLoggedIn, getPermissionToChangeUser(), async (req, res) => {
       try {
         let forumSubject = await Forum.findById(req.params._id);
         if (forumSubject) {

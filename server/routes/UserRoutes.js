@@ -75,15 +75,35 @@ class UserRoutes {
     });
   }
 
+  //CHECK WHITE SPACE, & LENGTH OF THE STRING
+  isValidData = (value, stringLength) => {
+    let inValid = new RegExp('^[_A-z0-9]{1,}$');
+    let result = inValid.test(value);
+    if(result && value.length >= stringLength){
+     return true;
+    }
+    return false;
+  }
+
   // REGISTER USER
   registerUser(){
     this.app.post('/register', async (req, res) => {
       let role = ""
       let admin = await User.findOne({"role": "admin"})
       !admin? role += "admin":role += "general"
+
+      let username = req.body.username
+      if (!this.isValidData(username, 3)) {
+        return res.status(404).send("Username must be at least 3 characters without space!");;
+      }
+      let password = req.body.password
+      if (!this.isValidData(password, 6)) {
+        return res.status(404).send("Password must be at least 6 characters without space!");
+      }
+ 
       let newUser= new User({
-          username: req.body.username, role}),
-          passWord = req.body.password;
+          username, role}),
+          passWord = password;
       await User.register(newUser, passWord, (err, user) => {
         if(err){
           return res.status(404).send(err.message);
