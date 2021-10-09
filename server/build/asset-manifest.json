@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.f5f95a16.chunk.css",
+    "main.js": "/static/js/main.caaab398.chunk.js",
+    "main.js.map": "/static/js/main.caaab398.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.80c25727.js",
+    "runtime-main.js.map": "/static/js/runtime-main.80c25727.js.map",
+    "static/css/2.20aa2d7b.chunk.css": "/static/css/2.20aa2d7b.chunk.css",
+    "static/js/2.8656d6e0.chunk.js": "/static/js/2.8656d6e0.chunk.js",
+    "static/js/2.8656d6e0.chunk.js.map": "/static/js/2.8656d6e0.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.20aa2d7b.chunk.css.map": "/static/css/2.20aa2d7b.chunk.css.map",
+    "static/css/main.f5f95a16.chunk.css.map": "/static/css/main.f5f95a16.chunk.css.map",
+    "static/js/2.8656d6e0.chunk.js.LICENSE.txt": "/static/js/2.8656d6e0.chunk.js.LICENSE.txt",
+    "static/media/mriduava.098add45.jpg": "/static/media/mriduava.098add45.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.80c25727.js",
+    "static/css/2.20aa2d7b.chunk.css",
+    "static/js/2.8656d6e0.chunk.js",
+    "static/css/main.f5f95a16.chunk.css",
+    "static/js/main.caaab398.chunk.js"
+  ]
+}

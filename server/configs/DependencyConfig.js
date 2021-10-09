@@ -13,7 +13,15 @@ class DependencyConfig {
 
     // MONGODB CONFIG
     const db = "forumdb";
-    mongoose.connect('mongodb://localhost:27017/' + db, { 
+    const mongodbatlas = "mongodb+srv://mridu:armitaava@forum.zg1y8.mongodb.net/mriduforum?retryWrites=true&w=majority"
+    // mongoose.connect('mongodb://localhost:27017/' + db, { 
+    //   useUnifiedTopology: true,
+    //   useNewUrlParser: true,
+    //   useCreateIndex: true,
+    //   useFindAndModify: false
+    // });
+
+     mongoose.connect(mongodbatlas, { 
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
@@ -25,14 +33,24 @@ class DependencyConfig {
     this.app.use(bodyParser.urlencoded({ extended: true }))
 
     // SESSION CONFIG
+    // this.app.use(session({
+    //     secret: 'mriduava',
+    //     saveUninitialized: false,
+    //     resave: false,
+    //     store: new MongoStore({
+    //         url: 'mongodb://localhost:27017/' + db,
+    //         touchAfter: 24 * 3600
+    //     })
+    // }));
+
     this.app.use(session({
-        secret: 'mriduava',
-        saveUninitialized: false,
-        resave: false,
-        store: new MongoStore({
-            url: 'mongodb://localhost:27017/' + db,
-            touchAfter: 24 * 3600
-        })
+      secret: 'mriduava',
+      saveUninitialized: false,
+      resave: false,
+      store: new MongoStore({
+          url: mongodbatlas,
+          touchAfter: 24 * 3600
+      })
     }));
 
     // PASSPORT CONFIG

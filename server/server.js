@@ -3,7 +3,8 @@ const app = express();
 const ForumRoutes = require('./routes/ForumRoutes');
 const ThreadRoutes = require('./routes/ThreadRoutes');
 const UserRoutes = require('./routes/UserRoutes');
-const DependencyConfig = require('./configs/DependencyConfig')
+const DependencyConfig = require('./configs/DependencyConfig');
+const path = require("path")
 
 // DEPENDENCIES CONFIGURATION
 new DependencyConfig(app)
@@ -14,21 +15,28 @@ new ThreadRoutes(app);
 new UserRoutes(app);
 
 app.use((req,res,next)=>{
-  var _send = res.send;
-  var sent = false;
+  let _send = res.send;
+  let sent = false;
   res.send = (data) =>{
     if(sent) return;
     _send.bind(res)(data);
     sent = true;
-};
+  };
   next();
 });
 
 
-// INVALID URL
-app.get('*', async (req, res) => {
-  await res.status(404).send('Page not found!');
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+
+
+// INVALID URL
+// app.get('*', async (req, res) => {
+//   await res.status(404).send('Page not found!');
+// });
 
 // SERVER
 const PORT = process.env.PORT || 3200;
