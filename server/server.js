@@ -25,8 +25,11 @@ app.use((req,res,next)=>{
   next();
 });
 
-
 app.use(express.static(path.join(__dirname, 'build')));
+
+// var userProfile;
+// app.get('/success', (req, res) => res.send(userProfile));
+// app.get('/error', (req, res) => res.send("error logging in"));
 
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));

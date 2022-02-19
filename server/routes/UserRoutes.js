@@ -14,6 +14,8 @@ class UserRoutes {
     this.deleteUser();
     this.searchUser();
     this.setUserRole();
+    this.googleAuth();
+    this.googleCallback();
   }
 
   // GET ALL USERS
@@ -178,6 +180,39 @@ class UserRoutes {
       );
     });
   }
+
+  googleAuth(){
+    // this.app.get('/auth/google', async (req, res, next) => { 
+    //   await passport.authenticate('google', (err, user, info) => { 
+    //       if (err) { 
+    //         return next(err); 
+    //       } 
+    //       if (!user) { 
+    //         return res.status(404).send("Username or Password incorrect!"); 
+    //       } 
+    //       req.logIn(user, (err) => { 
+    //         if (err) { 
+    //           return next(err); 
+    //         } 
+    //         return res.status(200)
+    //           .send({ user : ['profile', 'email'] }); 
+    //       }); 
+    //   })(req, res, next); 
+    // });
+    this.app.get('/auth/google',
+      passport.authenticate('google', { scope:
+          [ 'email', 'profile' ] }
+    ));
+  }
+
+  googleCallback(){
+    this.app.get( '/auth/google/callback',
+    passport.authenticate( 'google', {
+      successRedirect: '/mypage',
+      failureRedirect: '/'
+    }));
+  }
+  
 
 }
 

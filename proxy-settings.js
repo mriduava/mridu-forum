@@ -27,6 +27,7 @@ module.exports = {
     || url.indexOf('/login') === 0
     || url.indexOf('/logout') === 0
     || url.indexOf('/register') === 0
-    || url.indexOf('/search/') === 0;
+    || url.indexOf('/search/') === 0
+    || url.indexOf('/auth/google') === 0;
   }
 };

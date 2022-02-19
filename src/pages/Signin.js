@@ -44,6 +44,10 @@ const Signin = (props) => {
         <Col xs="12" sm="8" md="6" lg="5" className="mx-auto m-5 border border-rounded p-5"> 
           <h4 className="text-dark font-weight-bold">Sign in</h4>
           <hr/>
+          <div className="d-block">
+            <a href="http://localhost:3200/auth/google" className="btn btn-outline-danger d-block"><span className="fa fa-google"></span> SignIn with Google</a>
+          </div>
+          <hr/>
           <Form onSubmit={loginUser}>
             <FormGroup>
               <Label for="username">Username</Label>
