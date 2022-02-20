@@ -1,7 +1,7 @@
 import React from 'react';
 import bgimage from '../images/mriduava.jpg'
 
-const Jumbotron = (props) => {
+export const Jumbotron = (props) => {
   return (
     <div className="jumbotron mb-2 text-center" 
       style={{ backgroundImage: `url(${bgimage})`, backgroundSize: 'cover' }}>

@@ -7,6 +7,11 @@ import Jumbotron from '../components/Jumbotron'
 const Home = () => {
   const { subjects, fetchFroumById } = useContext(ForumContext)
 
+  /**
+  * Iterate forum subjects array, & display data.
+  * onClick function call the fetchForumById method to get specific forum data.
+  * Link navigate to the forum detial page.
+  */
   const mapSubjects = () => {
     return subjects.map((subject, i) => {
       return (
