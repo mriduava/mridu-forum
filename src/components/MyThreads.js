@@ -6,6 +6,10 @@ const MyThreads= () => {
   const { user } = useContext(UserContext)
   const [myThreads, setMyThreads] = useState([])
 
+  /**
+  * Search thereads by the username who is logged in.
+  * Populate data to myThreads state.
+  */
   useEffect(()=>{
     const fetchMyThreads = async () => {
       let allMyThreads = await fetch(`/search/mythreads?username=${user.username}`)
@@ -15,6 +19,9 @@ const MyThreads= () => {
     fetchMyThreads()
   }, [user.username])
 
+  /**
+  * Iterate myThreads array, and display data.
+  */
   const mapThreads = () => {
     return myThreads.map((thread, i) => {
       return (

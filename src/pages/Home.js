@@ -44,8 +44,8 @@ const Home = () => {
       
       <Row className="text-white bg-secondary border border-rounded pt-2 mb-3"
         style={{margin: "0 0.5px 0 0.5px", borderRadius: "5px"}}>
-        <Col xs="12" sm="8"><h4 className="pl-2">Forums</h4></Col>
-        <Col sm="4" className="text-right d-none d-md-block d-sm-block d-lg-block"><h4>Threads</h4></Col>
+        <Col xs="12" sm="8" data-testid="header1"><h4 className="pl-2">Forums</h4></Col>
+        <Col sm="4" className="text-right d-none d-md-block d-sm-block d-lg-block"><h4 data-testid="header2">Threads</h4></Col>
       </Row>
       {subjects&&mapSubjects()}
     </Container>

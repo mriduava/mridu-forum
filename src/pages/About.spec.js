@@ -8,7 +8,7 @@ describe('About', () => {
     it('has header of about info', () => {
       const { container } = render(<About/>);
       const header = container.querySelector('h1');
-      expect(header).toHaveTextContent('THIS IS AN ABOUT PAGE')
+      expect(header).toHaveTextContent(/this is an about page/i)
     });
    })
 });
