@@ -1,10 +1,13 @@
 import React, {useContext, useState, useEffect} from 'react'
 import { UserContext } from '../contexts/UserContextProvider'
 import { Row, Col } from 'reactstrap';
+import { useSpring, animated } from 'react-spring'
 
 const MyThreads= () => {
   const { user } = useContext(UserContext)
   const [myThreads, setMyThreads] = useState([])
+
+  const props = useSpring({ to: { opacity: 1 }, from: { opacity: 0 } });
 
   useEffect(()=>{
     const fetchMyThreads = async () => {
@@ -31,9 +34,9 @@ const MyThreads= () => {
   return ( 
     <Row>
       <Col lg="12">
-        <div className="my-threads">
+        <animated.div className="my-threads" style={props}>
           {myThreads&&mapThreads()}
-        </div>
+        </animated.div>
       </Col>
     </Row>
   )

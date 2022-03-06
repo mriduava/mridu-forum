@@ -30,19 +30,30 @@ const Home = () => {
   }
 
   return (
-    <Container className="container mx-auto px-0" >
-      <Row className="mx-0 px-0">
+    <Container fluid className="container mx-auto px-0">
+      <Row className="mx-0 px-0 jumbotron-area">
         <Col lg="12" className="px-0">
-        <Jumbotron/>
+          <Jumbotron/>
         </Col>
       </Row>
-      
-      <Row className="text-white bg-secondary border border-rounded pt-2 mb-3"
-        style={{margin: "0 0.5px 0 0.5px", borderRadius: "5px"}}>
-        <Col xs="12" sm="8"><h4 className="pl-2">Forums</h4></Col>
-        <Col sm="4" className="text-right d-none d-md-block d-sm-block d-lg-block"><h4>Threads</h4></Col>
-      </Row>
-      {subjects&&mapSubjects()}
+
+      <Row className="foram-area">
+        <Col lg="12">
+          <Row className="text-white border border-rounded pt-2 mb-3 forum-bar"
+            style={{margin: "0 0.5px 0 0.5px", borderRadius: "5px"}}>
+            <Col xs="12" sm="8"><h4 className="pl-2">Forums</h4></Col>
+            <Col sm="4" className="text-right d-none d-md-block d-sm-block d-lg-block"><h4>Threads</h4></Col>
+          </Row>
+          {subjects&&mapSubjects()}
+        </Col>
+         {/* <Col lg="4" className="pl-0">
+          <Row className="text-white border border-rounded pt-2 mb-3 forum-bar"
+            style={{margin: "0 0.5px 0 0.5px", borderRadius: "5px"}}>
+            <Col xs="12" sm="12"><h4 className="pl-2">Popular posts</h4></Col>
+          </Row>
+        </Col> */}
+      </Row>      
+
     </Container>
   )
 }

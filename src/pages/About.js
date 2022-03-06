@@ -1,10 +1,15 @@
 import React from 'react'
+import { Container, Row, Col } from 'reactstrap';
+import { useSpring, animated } from 'react-spring'
 
 const About = () => {
+  const props = useSpring({ to: { opacity: 1 }, from: { opacity: 0 } })
   return (
-    <div>
-      <h1>THIS IS AN ABOUT PAGE</h1>
-    </div>
+    <Container style={{textAlign:'center', minHeight:"80vh"}} className="border border-secondary pb-5">
+      <animated.div style={props}>
+        <h1 style={{marginTop: '10%'}}>THIS IS A DEMO WEB SITE</h1>
+      </animated.div>
+    </Container>
   )
 }
 

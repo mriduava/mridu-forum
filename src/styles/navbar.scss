@@ -1,0 +1,16 @@
+.navbar{
+  background-color: rgba(238, 244, 249, 0.5);
+  
+  .navbar-brand> h3{
+    color: #3776B0;
+    font-size: 2.1rem;
+    font-family: Gerstner;
+  }
+
+  .navbar-brand> h3:hover{
+    color:rgb(150, 150, 150);
+    transition: 0.1s;
+  }
+}
+
+

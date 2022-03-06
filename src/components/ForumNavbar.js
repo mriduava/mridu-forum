@@ -16,11 +16,14 @@ const ForumNavbar= (props) => {
 
   return (
     <Container className="px-0">
-      <Navbar light expand="md" className="bg-warning bg-gradient rounded-bottom shadow mb-2">
+      <Navbar light expand="md" className="rounded-bottom navbar mb-2 sticky-top">
         <Link to="/" className="mr-auto navbar-brand text-datk font-weight-bold mb-0 pt-2 pb-0"><h3>MRIDU FORUM</h3></Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
+            <NavItem>
+              <Link className="text-dark mr-4" to="/about"> ABOUT</Link>
+            </NavItem>
             {!user?(
             <>
               <NavItem>

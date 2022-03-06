@@ -2,9 +2,12 @@ import React, {useContext} from 'react'
 import { ForumContext } from '../contexts/ForumContextProvider'
 import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'reactstrap';
+import { useSpring, animated } from 'react-spring'
 
 const ThreadList = () => {
-  const { threads, subjectId, subjectName, fetchThreadById } = useContext(ForumContext)
+  const { threads, subjectId, subjectName, fetchThreadById } = useContext(ForumContext);
+
+   const props = useSpring({ to: { opacity: 1 }, from: { opacity: 0 } })
 
   const mapThreads = () => {
     return threads.map((thread, i) => {
@@ -28,11 +31,18 @@ const ThreadList = () => {
 
   return (
     <Container className="themed-container">
-      <Row className="text-light bg-info pt-2 mb-3">
-        <Col xs="9" sm="8"><h5>Threads</h5></Col>
+      <Row className="text-light pt-2 mb-3 thread-bar">
+        <Col xs="9" sm="8">
+        <h5>
+          <Link to={`/`} style={{ textDecoration: 'none' }}>
+            <span className="subject-name"> Home </span> 
+          </Link>
+            &#187; {subjectName} 
+        </h5>
+        </Col>
         <Col xs="3" sm="4" className="text-lg-right d-none d-lg-block"><h5>Answers</h5></Col>
       </Row>
-      {threads && mapThreads()}
+      <animated.div style={props}>{threads && mapThreads()}</animated.div>
     </Container>
   )
 }

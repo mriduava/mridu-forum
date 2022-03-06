@@ -2,16 +2,19 @@ import React, {useContext, useState} from 'react'
 import { ForumContext } from '../contexts/ForumContextProvider'
 import { UserContext } from '../contexts/UserContextProvider'
 import { Container, Row, Col, Form, FormGroup, Fade } from 'reactstrap';
+import { useSpring, animated } from 'react-spring'
 import { Link } from 'react-router-dom';
 import moment from 'moment'
 
-const Thread = (props) => {
+const Thread = () => {
   const { subjectName, thread, subjectId, threadId, fetchThreadById } = useContext(ForumContext)
   const { user } = useContext(UserContext)
   const [comment, setComment] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [showEditForm, setShowEditForm] = useState(false)
-  const [editText, setEditText] = useState('')
+  const [editText, setEditText] = useState('');
+
+  const props = useSpring({ to: { opacity: 1 }, from: { opacity: 0 } });
 
   const timeFormat = (time) => {
     return moment(time).format("YYYY-MM-DD, H:mm");
@@ -137,11 +140,15 @@ const Thread = (props) => {
   const mapThreads = () => {
       return (
         <div key={'sub' + thread._id}>
-          <Row className="text-light bg-success pt-2">
+          <Row className="text-light pt-2 thread-bar">
             <Col xs="12" sm="12" md="8">
               <h5>
-                 <Link to={`/${subjectName}`} style={{ textDecoration: 'none' }}>
-                  <span className="subject-name">{subjectName} </span> 
+                <Link to={`/`} style={{ textDecoration: 'none' }}>
+                  <span className="subject-name"> Home </span> 
+                </Link>
+                 &#187; 
+                <Link to={`/${subjectName}`} style={{ textDecoration: 'none' }}>
+                  <span className="subject-name"> {subjectName} </span> 
                 </Link>
                 &#187; {thread.topic}
               </h5>
@@ -217,8 +224,8 @@ const Thread = (props) => {
 
   return (
     <Container className="themed-container">
-      {thread && mapThreads()}
-      {thread && mapThreadPosts()}
+      <animated.div style={props}>{thread && mapThreads()}</animated.div>
+      <animated.div style={props}>{thread && mapThreadPosts()}</animated.div> 
     </Container>
   )
 }
