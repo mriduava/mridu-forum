@@ -1,16 +1,43 @@
 .navbar{
-  background-color: rgba(238, 244, 249, 0.5);
+  background-color: transparent;
+  z-index: +1;
+  flex-shrink: 0;
+  width: 100%;
   
   .navbar-brand> h3{
+    padding: 0;
     color: #3776B0;
-    font-size: 2.1rem;
+    font-size: 2.1em;
     font-family: Gerstner;
+    text-shadow:  0px 2px 5px rgba(0,0,0,0.01),
+                  0px 3px 5px rgba(0,0,0,0.05),
+                  0px 3px 5px rgba(0,0,0,0.1);
   }
 
   .navbar-brand> h3:hover{
     color:rgb(150, 150, 150);
     transition: 0.1s;
   }
+
+  .right-nav{
+    text-shadow:  0px 2px 5px rgba(0,0,0,0.01),
+    0px 3px 5px rgba(0,0,0,0.05),
+    0px 3px 5px rgba(0,0,0,0.1);
+  }
 }
 
+.sticky-top{
+  background-color: rgb(255, 255, 255);
+  transition: all 0.1s linear;
+  box-shadow: 0px 1px 5px rgba(0,0,0,0.01),
+      0px 1px 5px rgba(0,0,0,0.05),
+      0px 1px 5px rgba(0,0,0,0.1);
+}
+
+
+@media screen and (max-width: 602px) {
+  .navbar-brand> h3 { 
+    font-size: 2.1rem !important;
+  }
+}
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext,useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { UserContext } from '../contexts/UserContextProvider'
 import {Container, Collapse, Navbar, NavbarToggler, Nav, NavItem} from 'reactstrap';
@@ -6,8 +6,32 @@ import {Container, Collapse, Navbar, NavbarToggler, Nav, NavItem} from 'reactstr
 const ForumNavbar= (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
-  const { user, setUser} = useContext(UserContext)
+  const { user, setUser} = useContext(UserContext);
 
+  /**
+   * Sticky Navabr
+   */
+  const [scrolled, setScrolled]= useState(false);
+  const handleScroll = () => {
+    const offset = window.scrollY;
+    offset > 200 ?setScrolled(true):setScrolled(false); 
+  }
+
+  useEffect(()=>{
+    window.addEventListener('scroll', handleScroll);
+  }, [])
+
+  useEffect(() => {
+    if (scrolled) {
+      document.getElementById("sticky").classList.add("sticky-top");
+    }else{
+      document.getElementById("sticky").classList.remove("sticky-top");
+    }
+  }, [scrolled])
+ 
+  /**
+  * Function to logout users.
+  */
   const logoutUser = async () => {
     await fetch('/logout')
     setUser(null)
@@ -15,38 +39,50 @@ const ForumNavbar= (props) => {
   }
 
   return (
-    <Container className="px-0">
-      <Navbar light expand="md" className="rounded-bottom navbar mb-2 sticky-top">
-        <Link to="/" className="mr-auto navbar-brand text-datk font-weight-bold mb-0 pt-2 pb-0"><h3>MRIDU FORUM</h3></Link>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            <NavItem>
-              <Link className="text-dark mr-4" to="/about"> ABOUT</Link>
-            </NavItem>
-            {!user?(
-            <>
+    <div className="navbar px-0 py-0" id="sticky">
+      <Container className="px-lg-0">
+        <Navbar light expand="md" className="px-0">
+          <Link to="/" className="navbar-brand text-datk font-weight-bold"><h3>MRIDU FORUM</h3></Link>
+          <NavbarToggler onClick={toggle} />
+          <Collapse isOpen={isOpen} navbar>
+            <Nav className="ml-auto mt-2 right-nav" navbar>
               <NavItem>
-                <Link className="text-dark mr-4" to="/register">REGISTER</Link>
+                <Link to="/about">
+                  <h5 className="text-dark mr-lg-4">ABOUT</h5>
+                </Link>
               </NavItem>
-              <NavItem>
-                <Link className="text-dark" to="/signin">SIGN IN</Link>
-              </NavItem>
-            </>
-            ):(
-            <>
-              <NavItem>
-                <Link className="text-dark mr-4" to="/mypage">MY PAGE</Link>
-              </NavItem>
-              <NavItem>
-                <Link className="text-dark" onClick={logoutUser} to="/"> LOGOUT</Link>
-              </NavItem>
-            </>
-            )}
-          </Nav>          
-        </Collapse>
-      </Navbar>
-    </Container>
+              {!user?(
+              <>
+                <NavItem>
+                  <Link to="/register">
+                    <h5 className="text-dark mr-lg-4">REGISTER</h5>
+                  </Link>
+                </NavItem>
+                <NavItem>
+                  <Link to="/signin">
+                    <h5 className="text-dark">SIGN IN</h5>
+                  </Link>
+                </NavItem>
+              </>
+              ):(
+              <>
+                <NavItem>
+                  <Link to="/mypage">
+                    <h5 className="text-dark mr-lg-4">MY PAGE</h5>
+                  </Link>
+                </NavItem>
+                <NavItem>
+                  <Link onClick={logoutUser} to="/"> 
+                    <h5 className="text-dark">LOGOUT</h5>
+                  </Link>
+                </NavItem>
+              </>
+              )}
+            </Nav>
+          </Collapse>
+        </Navbar>
+      </Container>
+    </div>
   );
 }
 
