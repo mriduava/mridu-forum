@@ -26,10 +26,11 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "react-spring": "^9.4.3",
-    "reactstrap": "^8.7.1"
+    "reactstrap": "^8.7.1",
+    "serverless-http": "^2.7.0"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "eslintConfig": {
     "extends": [
