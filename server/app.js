@@ -37,7 +37,7 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
-app.use('/.netlify/functions/server', router); 
+// app.use('/.netlify/functions/server', router); 
 
 // app.use('/', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')));
 
@@ -49,4 +49,4 @@ app.use('/.netlify/functions/server', router);
 
 
 module.exports = app;
-module.exports.handler = serverless(app);
+// module.exports.handler = serverless(app);
