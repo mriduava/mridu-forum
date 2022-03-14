@@ -5,7 +5,7 @@ const ThreadRoutes = require('./routes/ThreadRoutes');
 const UserRoutes = require('./routes/UserRoutes');
 const DependencyConfig = require('./configs/DependencyConfig');
 const path = require("path");
-const serverless = require('serverless-http');
+// const serverless = require('serverless-http');
 const router = express.Router();
 
 // DEPENDENCIES CONFIGURATION
@@ -27,15 +27,15 @@ app.use((req,res,next)=>{
   next();
 });
 
-app.use(express.static(path.join(__dirname, '../public')));
+// app.use(express.static(path.join(__dirname, '../public')));
 
 // var userProfile;
 // app.get('/success', (req, res) => res.send(userProfile));
 // app.get('/error', (req, res) => res.send("error logging in"));
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public', 'index.html'));
-});
+// app.get('/*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../public', 'index.html'));
+// });
 
 // app.use('/.netlify/functions/server', router); 
 
@@ -49,4 +49,4 @@ app.get('/*', (req, res) => {
 
 
 module.exports = app;
-module.exports.handler = serverless(app);
+// module.exports.handler = serverless(app);
