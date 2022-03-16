@@ -27,7 +27,7 @@ app.use((req,res,next)=>{
   next();
 });
 
-// app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../build')));
 
 // var userProfile;
 // app.get('/success', (req, res) => res.send(userProfile));
@@ -39,12 +39,25 @@ app.use((req,res,next)=>{
 
 // app.use('/.netlify/functions/server', router); 
 
-// app.use('/', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')));
+app.use('/', (req, res) => res.sendFile(path.join(__dirname, '../build', 'index.html')));
 
 
 // INVALID URL
 // app.get('*', async (req, res) => {
 //   await res.status(404).send('Page not found!');
+// });
+
+// app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+// app.get("*", function (_, res) {
+//   res.sendFile(
+//     path.join(__dirname, "../frontend/build/index.html"),
+//     function (err) {
+//       if (err) {
+//         res.status(500).send(err);
+//       }
+//     }
+//   );
 // });
 
 
