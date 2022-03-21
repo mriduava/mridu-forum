@@ -39,7 +39,7 @@ const Signin = (props) => {
   }
 
   return (
-    <Container className="border border-secondary pb-5" style={{minHeight:"80vh"}}>
+    <Container className="border border-secondary pb-5">
       <Row>
         <Col xs="12" sm="8" md="6" lg="5" className="mx-auto m-5 border border-rounded p-5"> 
           <h4 className="text-dark font-weight-bold">Sign in</h4>

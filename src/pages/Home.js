@@ -42,7 +42,7 @@ const Home = () => {
       <Container className="mx-auto px-0">      
         <Row className="foram-area">
           <Col lg="12">
-            <Row className="text-white border border-rounded pt-2 mb-3 forum-bar"
+            <Row className="text-white border border-rounded pt-2 mb-1 forum-bar"
               style={{margin: "0 0.5px 0 0.5px", borderRadius: "5px"}}>
               <Col xs="12" sm="8"><h4 className="pl-2">Forums</h4></Col>
               <Col sm="4" className="text-right d-none d-md-block d-sm-block d-lg-block"><h4>Threads</h4></Col>

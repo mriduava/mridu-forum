@@ -42,7 +42,7 @@ html {
 
 .App{
   display: flex;
-  min-height: 93.1vh;
+  min-height: 87.1vh;
   flex-direction: column;
 
   .content { 
@@ -55,6 +55,7 @@ html {
   }
   
   .footer {   
+    margin-top: 5px;
     flex-shrink: 0; 
     height: 48.5px;
 
@@ -73,7 +74,6 @@ html {
       0px 3px 5px rgba(0,0,0,0.1);
     }
     .footer-bottom{
-      padding-top: 10px;
       text-align: center;
       color:#EEF4F9 ;
       background-color: $blue-normal;

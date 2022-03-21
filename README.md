@@ -2,7 +2,7 @@
 ## Node-Express-MongoDB-React
 **Forum System**<br>
 >An online discussion site<br>
->Demo site: https://mriduforum.herokuapp.com<br>
+>Demo site: https://mridu-forum.herokuapp.com<br>
 
 > @author : MARUF AHMED<br>
 > @email  : maruf.ahmed@live.se<br>

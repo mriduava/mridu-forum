@@ -31,7 +31,7 @@ const ThreadList = () => {
 
   return (
     <Container className="themed-container">
-      <Row className="text-light pt-2 mb-3 thread-bar">
+      <Row className="text-light pt-2 mb-1 thread-bar">
         <Col xs="9" sm="8">
         <h5>
           <Link to={`/`} style={{ textDecoration: 'none' }}>
