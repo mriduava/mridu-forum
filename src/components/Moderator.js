@@ -8,7 +8,7 @@ const Moderator = () => {
   const { user } = useContext(UserContext)
 
   return (
-    <Container className="border border-warning pb-5" style={{minHeight:"80vh"}}>
+    <Container className="border border-info pb-5">
       <Row className="d-flex flex-column">
         <Col xs="12" sm="12" md="12" lg="12" className="pl-3 pt-0"> 
           <h1 className="text-info font-weight-bold pt-5 ml-3">{user&&user.username.toUpperCase()}</h1>

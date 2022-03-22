@@ -26,9 +26,10 @@ const Signin = (props) => {
         Promise.resolve(response)
         .then(user => {
           setUser(user)
-          localStorage.setItem('token', JSON.stringify(user)) 
+          localStorage.setItem('token', JSON.stringify(user));
+          props.history.push('/mypage');
         })             
-        props.history.push('/mypage') 
+        // props.history.push('/mypage') 
       } else {
         setMessage("Username or Password incorrect!")
       }
@@ -44,10 +45,10 @@ const Signin = (props) => {
         <Col xs="12" sm="8" md="6" lg="5" className="mx-auto m-5 border border-rounded p-5"> 
           <h4 className="text-dark font-weight-bold">Sign in</h4>
           <hr/>
-          <div className="d-block">
-            <a href="http://localhost:3200/auth/google" className="btn btn-outline-danger d-block"><span className="fa fa-google"></span> SignIn with Google</a>
+          {/* <div className="d-block">
+            <a href="/auth/google" className="btn btn-outline-danger d-block"><span className="fa fa-google"></span> SignIn with Google</a>
           </div>
-          <hr/>
+          <hr/> */}
           <Form onSubmit={loginUser}>
             <FormGroup>
               <Label for="username">Username</Label>

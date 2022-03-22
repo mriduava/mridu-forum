@@ -2,15 +2,22 @@ import React, {useContext} from 'react'
 import { ForumContext } from '../contexts/ForumContextProvider'
 import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'reactstrap';
-import Jumbotron from '../components/Jumbotron'
+import Jumbotron from '../components/Jumbotron';
+import { useSpring, animated } from 'react-spring'
 
 const Home = () => {
-  const { subjects, fetchFroumById } = useContext(ForumContext)
+  const { subjects, fetchFroumById } = useContext(ForumContext);
+  const animate = useSpring({ to: { opacity: 1 }, from: { opacity: 0 } });
 
+  /**
+  * Iterate forum subjects array, & display data.
+  * onClick function call the fetchForumById method to get specific forum data.
+  * Link navigate to the forum detial page.
+  */
   const mapSubjects = () => {
     return subjects.map((subject, i) => {
       return (
-        <div key={'sub' + subject._id + i}>
+        <animated.div key={'sub' + subject._id + i} style={animate}>
           <Row className="mx-0">
             <Col xs="12" sm="8">
               <Link to={`/${subject.subject}`} style={{ textDecoration: 'none' }}
@@ -24,7 +31,7 @@ const Home = () => {
             </Col>
           </Row>
           <hr/>
-        </div>    
+        </animated.div>    
       )
     })
   }

@@ -7,7 +7,7 @@ const MyThreads= () => {
   const { user } = useContext(UserContext)
   const [myThreads, setMyThreads] = useState([])
 
-  const props = useSpring({ to: { opacity: 1 }, from: { opacity: 0 } });
+  const animate = useSpring({ to: { opacity: 1 }, from: { opacity: 0 } });
 
   useEffect(()=>{
     const fetchMyThreads = async () => {
@@ -18,6 +18,9 @@ const MyThreads= () => {
     fetchMyThreads()
   }, [user.username])
 
+  /**
+  * Iterate myThreads array, and display data.
+  */
   const mapThreads = () => {
     return myThreads.map((thread, i) => {
       return (
@@ -34,7 +37,7 @@ const MyThreads= () => {
   return ( 
     <Row>
       <Col lg="12">
-        <animated.div className="my-threads" style={props}>
+        <animated.div className="my-threads" style={animate}>
           {myThreads&&mapThreads()}
         </animated.div>
       </Col>
