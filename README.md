@@ -1,12 +1,13 @@
 # MRIDU FORUM
-## Node-Express-MongoDB-React
-**Forum System**<br>
+## React, Node JS, Express, MongoDB
+**FORUM SYSTEM**<br>
 >An online discussion site<br>
 >Demo site: https://mridu-forum.herokuapp.com<br>
 
 > @author : MARUF AHMED<br>
 > @email  : maruf.ahmed@live.se<br>
 > @since  : JAN 2021<br>
+> @updated: MAR 2022<br>
 
 
 ## FUNCTIONALITIES
@@ -29,7 +30,7 @@
 > npm install
 * Run from command prompt
 > npm start
-* Navigate to browser `http://localhost:3000/`. 
+* Navigate to browser `http://localhost:3200/`. 
 
 &copy; 2021 MARUF AHMED<br> 
 Licensed under the [MIT License](LICENSE). 
